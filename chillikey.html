@@ -732,7 +732,7 @@
 
         function copyScriptLoader() {
             playSound('copy');
-            const loaderCode = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chillihubv2.lua"))()';
+            const loaderCode = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chillihubv2.lua';
             navigator.clipboard.writeText(loaderCode).catch(() => {
                 const el = document.createElement("textarea");
                 el.value = loaderCode;
