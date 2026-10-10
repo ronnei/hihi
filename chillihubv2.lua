@@ -1,10 +1,9 @@
 -- =========================================================================
 --   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/4)
---   VELVET RUBY EDITION · AUTHOR: RONNEI7.HTK · CHU KỲ 24 TIẾNG
+--   Chilli Hub V2 · có ngôn ngữ tiếng việt · New
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
@@ -12,6 +11,7 @@ local Lighting = game:GetService("Lighting")
 
 local LocalPlayer = Players.LocalPlayer
 local KeyUrl = "https://link4m.net/80x8y"
+local TutorialUrl = "https://craftvip.github.io/free/getkey.html"
 local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chillihubv2.lua"
 
 local KeyFileName = "ChilliV2_KeyData.json"
@@ -24,8 +24,8 @@ local ActiveBlurEffect = nil
 local InputBlockerScreen = nil
 local OpenKeySystemUI = nil
 
--- MODULE MÃ HÓA BẢO MẬT HEX-XOR
-local CIPHER_KEY = 119
+-- MODULE MÃ HÓA BẢO MẬT DỮ LIỆU CỤC BỘ
+local CIPHER_KEY = 127
 
 local function EncryptData(str: string): string
     local hex = {}
@@ -116,7 +116,8 @@ local function VerifyChilliV2Key(rawInput: string): boolean
         end
     end
     return false
-end-- =========================================================================
+end
+-- =========================================================================
 --   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 2/4)
 --   SNAPSHOT UI · KHÓA MÀN HÌNH BẢO MẬT · VELVET LIVE HUD
 -- =========================================================================
@@ -165,7 +166,7 @@ local function ApplyScreenLockdown()
         local shield = Instance.new("TextButton")
         shield.Size = UDim2.new(1, 0, 1, 0)
         shield.Position = UDim2.new(0, 0, 0, 0)
-        shield.BackgroundColor3 = Color3.fromRGB(12, 5, 8)
+        shield.BackgroundColor3 = Color3.fromRGB(10, 4, 7)
         shield.BackgroundTransparency = 0.45
         shield.Text = ""
         shield.AutoButtonColor = false
@@ -255,9 +256,9 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, color: C
     if not ToastGui.Parent then ToastGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
     local ToastFrame = Instance.new("Frame")
-    ToastFrame.Size = UDim2.new(0, 385, 0, 74)
+    ToastFrame.Size = UDim2.new(0, 385, 0, 72)
     ToastFrame.Position = UDim2.new(0.5, -192, 0, -100)
-    ToastFrame.BackgroundColor3 = Color3.fromRGB(20, 8, 12)
+    ToastFrame.BackgroundColor3 = Color3.fromRGB(16, 6, 10)
     ToastFrame.BorderSizePixel = 0
     ToastFrame.ZIndex = 50
     ToastFrame.Parent = ToastGui
@@ -281,7 +282,7 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, color: C
     Title.Position = UDim2.new(0, 52, 0, 12)
     Title.BackgroundTransparency = 1
     Title.Text = titleText
-    Title.TextColor3 = color or Color3.fromRGB(245, 195, 210)
+    Title.TextColor3 = color or Color3.fromRGB(250, 205, 218)
     Title.TextSize = 11.5
     Title.Font = Enum.Font.GothamBold
     Title.TextXAlignment = Enum.TextXAlignment.Left
@@ -305,7 +306,7 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, color: C
     local BarBg = Instance.new("Frame")
     BarBg.Size = UDim2.new(1, -24, 0, 3)
     BarBg.Position = UDim2.new(0, 12, 1, -6)
-    BarBg.BackgroundColor3 = Color3.fromRGB(36, 12, 18)
+    BarBg.BackgroundColor3 = Color3.fromRGB(35, 10, 16)
     BarBg.BorderSizePixel = 0
     BarBg.ZIndex = 51
     BarBg.Parent = ToastFrame
@@ -330,9 +331,10 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, color: C
             end)
         end
     end)
-end-- =========================================================================
+end
+-- =========================================================================
 --   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 3/4)
---   GIAO DIỆN VELVET RUBY MỜ · TYPOGRAPHY DỊU MẮT · CHỮ NGHỆ THUẬT
+--   NÚT HƯỚNG DẪN GETKEY RÕ RÀNG · KHUNG THẺ 425PX · DÁN NHANH QUICK-PASTE
 -- =========================================================================
 
 local Languages = {
@@ -340,14 +342,17 @@ local Languages = {
         LangBtnText = "🇻🇳 VN ▾",
         SelectLangTitle = "🌶️ NGÔN NGỮ HỆ THỐNG / LANGUAGE",
         Title = "Chilli Hub V2 X Ronnei",
-        Subtitle = "chilli hub v2 được tạo bởi ronnei7.htk",
+        Subtitle = "chilli hub v2 được việt hoá bởi ronnei7.htk",
         CenterTitle = "CHILLI HUB V2 × RONNEI",
-        CenterSub = "Steal An Egg 🥚 Edition",
-        Placeholder = "Dán mã key bản quyền vào đây (chillihubv2-...)...",
+        CenterSub = "Steal An Egg 🥚",
+        Placeholder = "Dán mã key bản quyền tại đây...",
+        QuickPaste = "📋 Dán",
         GetKey = "⚡ LẤY KEY (24 TIẾNG)",
         CheckKey = "🌶️ KÍCH HOẠT V2",
+        Tutorial = "📖 HƯỚNG DẪN CÁCH VƯỢT LINK LẤY KEY",
         Notice = "📌 Lưu ý: Link getkey 24 tiếng thao tác nhanh gọn (chỉ 1 phút vượt link). Mỗi key có hạn sử dụng đúng 24 giờ kể từ khi kích hoạt.",
         CopiedLink = "📋 ĐÃ SAO CHÉP LINK GETKEY 24 TIẾNG VÀO CLIPBOARD!",
+        CopiedTutorial = "📖 ĐÃ SAO CHÉP LINK HƯỚNG DẪN VÀO CLIPBOARD!",
         Checking = "ĐANG XÁC THỰC...",
         CheckingMsg = "⏳ Đang đối soát chứng chỉ mã hóa trên máy chủ Chilli...",
         Success = "✔ Xác thực thành công! Đang khởi động Chilli Hub V2...",
@@ -359,12 +364,15 @@ local Languages = {
         Title = "Chilli Hub V2 X Ronnei",
         Subtitle = "chilli hub v2 được tạo bởi ronnei7.htk",
         CenterTitle = "CHILLI HUB V2 × RONNEI",
-        CenterSub = "Steal An Egg 🥚 Edition",
-        Placeholder = "Paste your license key here (chillihubv2-...)...",
+        CenterSub = "Steal An Egg 🥚",
+        Placeholder = "Paste your license key here...",
+        QuickPaste = "📋 Paste",
         GetKey = "⚡ GET KEY (24 HOURS)",
         CheckKey = "🌶️ ACTIVATE V2",
+        Tutorial = "📖 HOW TO BYPASS LINK & GET KEY TUTORIAL",
         Notice = "📌 Notice: 24-hour key link is fast and easy (takes only 1 min). Each key remains fully valid for exactly 24 hours.",
         CopiedLink = "📋 24-HOUR KEY LINK COPIED TO CLIPBOARD!",
+        CopiedTutorial = "📖 TUTORIAL LINK COPIED TO CLIPBOARD!",
         Checking = "AUTHENTICATING...",
         CheckingMsg = "⏳ Verifying Velvet Ruby credentials with Chilli server...",
         Success = "✔ Authorization granted! Launching Chilli Hub V2...",
@@ -373,14 +381,14 @@ local Languages = {
 }
 local CurrentLang = "VI"
 
-local function PlayDeepBounce(btn: TextButton)
+local function PlaySpringButton(btn: TextButton)
     local origSize = btn.Size
     local origPos = btn.Position
-    local shrinkSize = UDim2.new(origSize.X.Scale, origSize.X.Offset - 5, origSize.Y.Scale, origSize.Y.Offset - 3)
-    local shrinkPos = UDim2.new(origPos.X.Scale, origPos.X.Offset + 2.5, origPos.Y.Scale, origPos.Y.Offset + 1.5)
-    
+    local shrinkSize = UDim2.new(origSize.X.Scale, origSize.X.Offset - 4, origSize.Y.Scale, origSize.Y.Offset - 3)
+    local shrinkPos = UDim2.new(origPos.X.Scale, origPos.X.Offset + 2, origPos.Y.Scale, origPos.Y.Offset + 1.5)
+
     local t1 = TweenService:Create(btn, TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = shrinkSize, Position = shrinkPos })
-    local t2 = TweenService:Create(btn, TweenInfo.new(0.16, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = origSize, Position = origPos })
+    local t2 = TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = origSize, Position = origPos })
     t1:Play()
     t1.Completed:Connect(function() t2:Play() end)
 end
@@ -395,11 +403,11 @@ OpenKeySystemUI = function()
     pcall(function() ScreenGui.Parent = CoreGui end)
     if not ScreenGui.Parent then ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
-    -- Khung thẻ chính: Tone đen rượu vang mờ, loại bỏ viền chói gắt (440 x 380)
+    -- Mở rộng kích thước chiều cao lên 425px để tạo khoảng cách thông thoáng
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    MainFrame.Size = UDim2.new(0, 440, 0, 380)
+    MainFrame.Size = UDim2.new(0, 440, 0, 425)
     MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
     MainFrame.BackgroundColor3 = Color3.fromRGB(15, 6, 9)
     MainFrame.BorderSizePixel = 0
@@ -411,19 +419,16 @@ OpenKeySystemUI = function()
     local MainScale = Instance.new("UIScale", MainFrame)
     MainScale.Scale = 0.5
 
-    -- Viền lụa hồng nhung dịu mắt
+    -- Viền nhịp thở Velvet Rose tự động hóa bằng C++ Tween
     local MainStroke = Instance.new("UIStroke", MainFrame)
     MainStroke.Thickness = 1.4
     MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    MainStroke.Color = Color3.fromRGB(220, 68, 98)
+    MainStroke.Color = Color3.fromRGB(225, 65, 95)
 
-    RunService.RenderStepped:Connect(function()
-        local val = (math.sin(tick() * 1.8) + 1) / 2
-        local r = (190 + math.floor(val * 35)) / 255
-        local g = (45 + math.floor(val * 25)) / 255
-        local b = (75 + math.floor(val * 30)) / 255
-        MainStroke.Color = Color3.new(r, g, b)
-    end)
+    local breatheTween = TweenService:Create(MainStroke, TweenInfo.new(2.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+        Color = Color3.fromRGB(160, 40, 65)
+    })
+    breatheTween:Play()
 
     -- HEADER TOP BAR
     local HeaderBar = Instance.new("Frame")
@@ -452,20 +457,18 @@ OpenKeySystemUI = function()
     MiniLogoTxt.ZIndex = 33
     MiniLogoTxt.Parent = MiniLogo
 
-    -- TIÊU ĐỀ: Chilli Hub V2 X Ronnei (Chữ mềm mại, font GothamBold)
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(1, -115, 0, 18)
     TitleLabel.Position = UDim2.new(0, 36, 0, 2)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = Languages[CurrentLang].Title
-    TitleLabel.TextColor3 = Color3.fromRGB(248, 232, 236)
+    TitleLabel.TextColor3 = Color3.fromRGB(250, 235, 238)
     TitleLabel.TextSize = 12
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.ZIndex = 32
     TitleLabel.Parent = HeaderBar
 
-    -- DÒNG CHỮ THEO YÊU CẦU: chilli hub v2 được tạo bởi ronnei7.htk
     local SubTitleLabel = Instance.new("TextLabel")
     SubTitleLabel.Size = UDim2.new(1, -115, 0, 16)
     SubTitleLabel.Position = UDim2.new(0, 36, 0, 20)
@@ -494,14 +497,14 @@ OpenKeySystemUI = function()
     LangStroke.Color = Color3.fromRGB(180, 50, 75)
     LangStroke.Thickness = 1
 
-    -- LOGO TRUNG TÂM (CHILLI & EGG TONE DỊU)
+    -- LOGO TRUNG TÂM PHÙ ĐIÊU THẠCH ANH
     local CenterLogoBox = Instance.new("Frame")
-    CenterLogoBox.Size = UDim2.new(0, 56, 0, 56)
-    CenterLogoBox.Position = UDim2.new(0.5, -28, 0, 52)
+    CenterLogoBox.Size = UDim2.new(0, 54, 0, 54)
+    CenterLogoBox.Position = UDim2.new(0.5, -27, 0, 48)
     CenterLogoBox.BackgroundColor3 = Color3.fromRGB(24, 7, 12)
     CenterLogoBox.ZIndex = 31
     CenterLogoBox.Parent = MainFrame
-    Instance.new("UICorner", CenterLogoBox).CornerRadius = UDim.new(0, 18)
+    Instance.new("UICorner", CenterLogoBox).CornerRadius = UDim.new(0, 16)
     local CenterLogoStroke = Instance.new("UIStroke", CenterLogoBox)
     CenterLogoStroke.Color = Color3.fromRGB(220, 68, 98)
     CenterLogoStroke.Thickness = 1.2
@@ -510,16 +513,16 @@ OpenKeySystemUI = function()
     CenterLogoTxt.Size = UDim2.new(1, 0, 1, 0)
     CenterLogoTxt.BackgroundTransparency = 1
     CenterLogoTxt.Text = "🥚"
-    CenterLogoTxt.TextSize = 27
+    CenterLogoTxt.TextSize = 26
     CenterLogoTxt.ZIndex = 32
     CenterLogoTxt.Parent = CenterLogoBox
 
     local CenterTitle = Instance.new("TextLabel")
     CenterTitle.Size = UDim2.new(1, -30, 0, 20)
-    CenterTitle.Position = UDim2.new(0, 15, 0, 116)
+    CenterTitle.Position = UDim2.new(0, 15, 0, 108)
     CenterTitle.BackgroundTransparency = 1
     CenterTitle.Text = Languages[CurrentLang].CenterTitle
-    CenterTitle.TextColor3 = Color3.fromRGB(250, 240, 243)
+    CenterTitle.TextColor3 = Color3.fromRGB(252, 242, 245)
     CenterTitle.TextSize = 13.5
     CenterTitle.Font = Enum.Font.GothamBold
     CenterTitle.ZIndex = 31
@@ -527,7 +530,7 @@ OpenKeySystemUI = function()
 
     local CenterSub = Instance.new("TextLabel")
     CenterSub.Size = UDim2.new(1, -30, 0, 16)
-    CenterSub.Position = UDim2.new(0, 15, 0, 136)
+    CenterSub.Position = UDim2.new(0, 15, 0, 128)
     CenterSub.BackgroundTransparency = 1
     CenterSub.Text = Languages[CurrentLang].CenterSub
     CenterSub.TextColor3 = Color3.fromRGB(235, 148, 170)
@@ -536,33 +539,57 @@ OpenKeySystemUI = function()
     CenterSub.ZIndex = 31
     CenterSub.Parent = MainFrame
 
-    -- Ô NHẬP KEY (Màu nền êm dịu, không chói)
+    -- KHUNG NHẬP LIỆU THÔNG MINH
+    local InputContainer = Instance.new("Frame")
+    InputContainer.Size = UDim2.new(1, -36, 0, 38)
+    InputContainer.Position = UDim2.new(0, 18, 0, 150)
+    InputContainer.BackgroundColor3 = Color3.fromRGB(22, 7, 12)
+    InputContainer.ZIndex = 31
+    InputContainer.Parent = MainFrame
+    Instance.new("UICorner", InputContainer).CornerRadius = UDim.new(0, 10)
+    local InputStroke = Instance.new("UIStroke", InputContainer)
+    InputStroke.Color = Color3.fromRGB(60, 18, 28)
+
     local InputBox = Instance.new("TextBox")
-    InputBox.Size = UDim2.new(1, -36, 0, 38)
-    InputBox.Position = UDim2.new(0, 18, 0, 158)
-    InputBox.BackgroundColor3 = Color3.fromRGB(22, 7, 12)
+    InputBox.Size = UDim2.new(1, -75, 1, 0)
+    InputBox.Position = UDim2.new(0, 10, 0, 0)
+    InputBox.BackgroundTransparency = 1
     InputBox.TextColor3 = Color3.fromRGB(248, 235, 238)
     InputBox.PlaceholderColor3 = Color3.fromRGB(135, 75, 90)
     InputBox.PlaceholderText = Languages[CurrentLang].Placeholder
     InputBox.Text = ""
     InputBox.TextSize = 11.5
     InputBox.Font = Enum.Font.GothamMedium
+    InputBox.TextXAlignment = Enum.TextXAlignment.Left
     InputBox.ClearTextOnFocus = false
-    InputBox.ZIndex = 31
-    InputBox.Parent = MainFrame
-    Instance.new("UICorner", InputBox).CornerRadius = UDim.new(0, 10)
-    local InputStroke = Instance.new("UIStroke", InputBox)
-    InputStroke.Color = Color3.fromRGB(60, 18, 28)
+    InputBox.ZIndex = 32
+    InputBox.Parent = InputContainer
 
-    -- HÀNG NÚT BẤM (Thiết kế thanh lịch)
+    -- NÚT DÁN NHANH QUICK-PASTE
+    local QuickPasteBtn = Instance.new("TextButton")
+    QuickPasteBtn.Size = UDim2.new(0, 56, 0, 26)
+    QuickPasteBtn.Position = UDim2.new(1, -62, 0.5, -13)
+    QuickPasteBtn.BackgroundColor3 = Color3.fromRGB(34, 10, 17)
+    QuickPasteBtn.Text = Languages[CurrentLang].QuickPaste
+    QuickPasteBtn.TextColor3 = Color3.fromRGB(245, 195, 210)
+    QuickPasteBtn.TextSize = 10.5
+    QuickPasteBtn.Font = Enum.Font.GothamBold
+    QuickPasteBtn.AutoButtonColor = false
+    QuickPasteBtn.ZIndex = 33
+    QuickPasteBtn.Parent = InputContainer
+    Instance.new("UICorner", QuickPasteBtn).CornerRadius = UDim.new(0, 7)
+    local QuickPasteStroke = Instance.new("UIStroke", QuickPasteBtn)
+    QuickPasteStroke.Color = Color3.fromRGB(160, 45, 65)
+    QuickPasteStroke.Thickness = 1
+
+    -- HÀNG NÚT CHÍNH: LẤY KEY (24 TIẾNG) & KÍCH HOẠT V2
     local ButtonsRow = Instance.new("Frame")
-    ButtonsRow.Size = UDim2.new(1, -36, 0, 42)
-    ButtonsRow.Position = UDim2.new(0, 18, 0, 204)
+    ButtonsRow.Size = UDim2.new(1, -36, 0, 40)
+    ButtonsRow.Position = UDim2.new(0, 18, 0, 194)
     ButtonsRow.BackgroundTransparency = 1
     ButtonsRow.ZIndex = 31
     ButtonsRow.Parent = MainFrame
 
-    -- Nút 1: Lấy Key 24 Tiếng (Tone hồng nhung đằm thắm, không chói)
     local GetKeyBtn = Instance.new("TextButton")
     GetKeyBtn.Size = UDim2.new(0.5, -6, 1, 0)
     GetKeyBtn.Position = UDim2.new(0, 0, 0, 0)
@@ -578,7 +605,6 @@ OpenKeySystemUI = function()
     local GetKeyStroke = Instance.new("UIStroke", GetKeyBtn)
     GetKeyStroke.Color = Color3.fromRGB(240, 95, 125)
 
-    -- Nút 2: Kích Hoạt V2 (Kính tối viền hoa hồng)
     local CheckKeyBtn = Instance.new("TextButton")
     CheckKeyBtn.Size = UDim2.new(0.5, -6, 1, 0)
     CheckKeyBtn.Position = UDim2.new(0.5, 6, 0, 0)
@@ -595,10 +621,27 @@ OpenKeySystemUI = function()
     CheckStroke.Color = Color3.fromRGB(180, 50, 75)
     CheckStroke.Thickness = 1.2
 
+    -- NÚT HƯỚNG DẪN GETKEY CHUYÊN NGHIỆP (MÀU KÍNH VELVET MỜ ĐẸP MẮT)
+    local TutorialBtn = Instance.new("TextButton")
+    TutorialBtn.Size = UDim2.new(1, -36, 0, 36)
+    TutorialBtn.Position = UDim2.new(0, 18, 0, 240)
+    TutorialBtn.BackgroundColor3 = Color3.fromRGB(24, 8, 14)
+    TutorialBtn.Text = Languages[CurrentLang].Tutorial
+    TutorialBtn.TextColor3 = Color3.fromRGB(255, 180, 200)
+    TutorialBtn.TextSize = 11
+    TutorialBtn.Font = Enum.Font.GothamBold
+    TutorialBtn.AutoButtonColor = false
+    TutorialBtn.ZIndex = 32
+    TutorialBtn.Parent = MainFrame
+    Instance.new("UICorner", TutorialBtn).CornerRadius = UDim.new(0, 10)
+    local TutorialStroke = Instance.new("UIStroke", TutorialBtn)
+    TutorialStroke.Color = Color3.fromRGB(145, 45, 65)
+    TutorialStroke.Thickness = 1.2
+
     -- BẢNG THÔNG BÁO LƯU Ý
     local NoticeCard = Instance.new("Frame")
     NoticeCard.Size = UDim2.new(1, -36, 0, 68)
-    NoticeCard.Position = UDim2.new(0, 18, 0, 256)
+    NoticeCard.Position = UDim2.new(0, 18, 0, 284)
     NoticeCard.BackgroundColor3 = Color3.fromRGB(20, 6, 11)
     NoticeCard.ZIndex = 31
     NoticeCard.Parent = MainFrame
@@ -622,18 +665,52 @@ OpenKeySystemUI = function()
 
     local StatusMsg = Instance.new("TextLabel")
     StatusMsg.Size = UDim2.new(1, -36, 0, 22)
-    StatusMsg.Position = UDim2.new(0, 18, 0, 332)
+    StatusMsg.Position = UDim2.new(0, 18, 0, 362)
     StatusMsg.BackgroundTransparency = 1
     StatusMsg.Text = "Chilli Hub V2 X Ronnei · Security Protocol Active"
     StatusMsg.TextColor3 = Color3.fromRGB(145, 80, 95)
     StatusMsg.TextSize = 9.5
     StatusMsg.Font = Enum.Font.GothamMedium
     StatusMsg.ZIndex = 31
-    StatusMsg.Parent = MainFrame-- =========================================================================
+    StatusMsg.Parent = MainFrame
+    -- =========================================================================
 --   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/4)
---   SỰ KIỆN NÚT BẤM · ĐIỀU HƯỚNG BILINGUAL · ĐẾM NGƯỢC 2 PHÚT (120 GIÂY)
+--   SỰ KIỆN NÚT HƯỚNG DẪN · ANIMATION SAO CHÉP · ĐẾM NGƯỢC DÙNG THỬ 2 PHÚT
 -- =========================================================================
 
+    local function PlayShakeEffect()
+        local origOffset = MainFrame.Position.X.Offset
+        local offsets = { -8, 8, -6, 6, -3, 3, 0 }
+        task.spawn(function()
+            for _, off in ipairs(offsets) do
+                local t = TweenService:Create(MainFrame, TweenInfo.new(0.04, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    Position = UDim2.new(0.5, off, 0.5, 0)
+                })
+                t:Play()
+                t.Completed:Wait()
+            end
+            MainFrame.Position = UDim2.new(0.5, origOffset, 0.5, 0)
+        end)
+    end
+
+    QuickPasteBtn.MouseButton1Click:Connect(function()
+        PlaySpringButton(QuickPasteBtn)
+        local pasted = false
+        pcall(function()
+            if getclipboard then
+                InputBox.Text = getclipboard()
+                pasted = true
+            elseif fromclipboard then
+                InputBox.Text = fromclipboard()
+                pasted = true
+            end
+        end)
+        if not pasted then
+            InputBox:CaptureFocus()
+        end
+    end)
+
+    -- MODAL CHỌN NGÔN NGỮ
     local LangModal = Instance.new("Frame")
     LangModal.Name = "LangModal"
     LangModal.Size = UDim2.new(1, 0, 1, 0)
@@ -714,8 +791,10 @@ OpenKeySystemUI = function()
         CenterTitle.Text = data.CenterTitle
         CenterSub.Text = data.CenterSub
         InputBox.PlaceholderText = data.Placeholder
+        QuickPasteBtn.Text = data.QuickPaste
         GetKeyBtn.Text = data.GetKey
         CheckKeyBtn.Text = data.CheckKey
+        TutorialBtn.Text = data.Tutorial
         NoticeText.Text = data.Notice
         ModalTitle.Text = data.SelectLangTitle
 
@@ -753,10 +832,10 @@ OpenKeySystemUI = function()
         TweenService:Create(LangModal, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.In), { Position = UDim2.new(0, 0, 1, 0) }):Play()
     end
 
-    OpenLangBtn.MouseButton1Click:Connect(function() PlayDeepBounce(OpenLangBtn); OpenLangModal() end)
-    CloseModalBtn.MouseButton1Click:Connect(function() PlayDeepBounce(CloseModalBtn); CloseLangModal() end)
-    OptViBtn.MouseButton1Click:Connect(function() PlayDeepBounce(OptViBtn); SetLanguage("VI"); task.wait(0.15); CloseLangModal() end)
-    OptEnBtn.MouseButton1Click:Connect(function() PlayDeepBounce(OptEnBtn); SetLanguage("EN"); task.wait(0.15); CloseLangModal() end)
+    OpenLangBtn.MouseButton1Click:Connect(function() PlaySpringButton(OpenLangBtn); OpenLangModal() end)
+    CloseModalBtn.MouseButton1Click:Connect(function() PlaySpringButton(CloseModalBtn); CloseLangModal() end)
+    OptViBtn.MouseButton1Click:Connect(function() PlaySpringButton(OptViBtn); SetLanguage("VI"); task.wait(0.15); CloseLangModal() end)
+    OptEnBtn.MouseButton1Click:Connect(function() PlaySpringButton(OptEnBtn); SetLanguage("EN"); task.wait(0.15); CloseLangModal() end)
 
     MainFrame.BackgroundTransparency = 1
     MainScale.Scale = 0.4
@@ -765,9 +844,9 @@ OpenKeySystemUI = function()
 
     -- SỰ KIỆN BẤM LẤY KEY (24 TIẾNG)
     GetKeyBtn.MouseButton1Click:Connect(function()
-        PlayDeepBounce(GetKeyBtn)
+        PlaySpringButton(GetKeyBtn)
         if setclipboard then setclipboard(KeyUrl) elseif toclipboard then toclipboard(KeyUrl) end
-        
+
         GetKeyBtn.Text = "COPIED LINK (24H)!"
         GetKeyBtn.BackgroundColor3 = Color3.fromRGB(16, 185, 129)
         GetKeyStroke.Color = Color3.fromRGB(52, 211, 153)
@@ -785,12 +864,39 @@ OpenKeySystemUI = function()
         end)
     end)
 
+    -- SỰ KIỆN BẤM NÚT HƯỚNG DẪN CÁCH VƯỢT LINK GETKEY
+    local isTutorialDebounce = false
+    TutorialBtn.MouseButton1Click:Connect(function()
+        if isTutorialDebounce then return end
+        isTutorialDebounce = true
+        PlaySpringButton(TutorialBtn)
+
+        if setclipboard then setclipboard(TutorialUrl) elseif toclipboard then toclipboard(TutorialUrl) end
+
+        TutorialBtn.Text = "📖 ĐÃ SAO CHÉP LINK HƯỚNG DẪN!"
+        TutorialBtn.BackgroundColor3 = Color3.fromRGB(16, 185, 129)
+        TutorialStroke.Color = Color3.fromRGB(52, 211, 153)
+        StatusMsg.Text = Languages[CurrentLang].CopiedTutorial
+        StatusMsg.TextColor3 = Color3.fromRGB(52, 211, 153)
+
+        task.delay(2.5, function()
+            if TutorialBtn and TutorialBtn.Parent then
+                TutorialBtn.Text = Languages[CurrentLang].Tutorial
+                TutorialBtn.BackgroundColor3 = Color3.fromRGB(24, 8, 14)
+                TutorialStroke.Color = Color3.fromRGB(145, 45, 65)
+                StatusMsg.Text = "Chilli Hub V2 X Ronnei · Security Protocol Active"
+                StatusMsg.TextColor3 = Color3.fromRGB(145, 80, 95)
+            end
+            isTutorialDebounce = false
+        end)
+    end)
+
     -- SỰ KIỆN BẤM KÍCH HOẠT V2
     local isChecking = false
     CheckKeyBtn.MouseButton1Click:Connect(function()
         if isChecking then return end
         isChecking = true
-        PlayDeepBounce(CheckKeyBtn)
+        PlaySpringButton(CheckKeyBtn)
 
         CheckKeyBtn.Text = Languages[CurrentLang].Checking
         StatusMsg.Text = Languages[CurrentLang].CheckingMsg
@@ -821,6 +927,7 @@ OpenKeySystemUI = function()
             StatusMsg.TextColor3 = Color3.fromRGB(239, 68, 68)
 
             InputStroke.Color = Color3.fromRGB(220, 68, 98)
+            PlayShakeEffect()
             task.wait(0.6)
             InputStroke.Color = Color3.fromRGB(60, 18, 28)
         end
@@ -876,7 +983,7 @@ else
             end
 
             saveInterval = saveInterval + 1
-            if saveInterval >= 10 then -- Tối ưu ghi file 10 giây/lần chống giật lag
+            if saveInterval >= 10 then -- Ghi đĩa 10 giây/lần chống giật lag
                 saveInterval = 0
                 SaveTrialData(trialData.StartTime, os.time())
             end
