@@ -1,6 +1,6 @@
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/5)
---   CẤU HÌNH HỆ THỐNG · PRELOAD ASSET ĐÚNG VỊ TRÍ · 00:00 GMT+7
+--   CẤU HÌNH HỆ THỐNG · PRELOAD ASSET ĐÚNG ID · 00:00 GMT+7
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -15,8 +15,8 @@ local KeyUrl = "https://link4m.net/m2JAFv"
 local TutorialUrl = "https://craftvip.github.io/free/getkey.html"
 local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chilliv5beta.lua"
 
-local GiftBoxAssetId = "rbxassetid://92622270383869"  -- Hình hộp quà cho 2 hộp gacha bên trong
-local ChilliAvatarId = "rbxassetid://115116611981430" -- Hình quả ớt cho Avatar chính giữa & Header
+local ChilliAvatarId = "rbxassetid://92622270383869"  -- Hình quả ớt cho Avatar chính giữa & Header[span_3](start_span)[span_3](end_span)
+local GiftBoxAssetId = "rbxassetid://115116611981430" -- Hình hộp quà cho 2 hộp gacha bên trong[span_4](start_span)[span_4](end_span)
 
 local KeyFileName = "ChilliV5_KeyData.json"
 local TrialFileName = "ChilliV5_TrialData.json"
@@ -382,7 +382,7 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, color: C
 end
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 3/5)
---   GIAO DIỆN CHÍNH DARK MATTE · AVATAR ỚT ĐÚNG VỊ TRÍ · PHÓNG XA 480x500
+--   GIAO DIỆN CHÍNH DARK MATTE · AVATAR QUẢ ỚT ĐÚNG VỊ TRÍ · PHÓNG XA 480x500
 -- =========================================================================
 
 local Languages = {
@@ -475,7 +475,7 @@ OpenKeySystemUI = function()
     MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     MainStroke.Color = Color3.fromRGB(225, 29, 72)
 
-    -- HEADER TOP BAR (Dùng ảnh quả ớt ChilliAvatarId)
+    -- HEADER TOP BAR (Dùng ảnh quả ớt ChilliAvatarId)[span_5](start_span)[span_5](end_span)
     local HeaderBar = Instance.new("Frame")
     HeaderBar.Size = UDim2.new(1, -32, 0, 44)
     HeaderBar.Position = UDim2.new(0, 16, 0, 14)
@@ -498,7 +498,7 @@ OpenKeySystemUI = function()
     local MiniLogoImg = Instance.new("ImageLabel")
     MiniLogoImg.Size = UDim2.new(1, 0, 1, 0)
     MiniLogoImg.BackgroundTransparency = 1
-    MiniLogoImg.Image = ChilliAvatarId
+    MiniLogoImg.Image = ChilliAvatarId[span_6](start_span)[span_6](end_span)
     MiniLogoImg.ScaleType = Enum.ScaleType.Crop
     MiniLogoImg.ZIndex = 33
     MiniLogoImg.Parent = MiniLogo
@@ -543,7 +543,7 @@ OpenKeySystemUI = function()
     LangStroke.Color = Color3.fromRGB(160, 45, 65)
     LangStroke.Thickness = 1
 
-    -- LOGO AVATAR CHÍNH GIỮA (DÙNG ẢNH QUẢ ỚT ChilliAvatarId)
+    -- LOGO AVATAR CHÍNH GIỮA (DÙNG ẢNH QUẢ ỚT ChilliAvatarId)[span_7](start_span)[span_7](end_span)
     local CenterLogoBox = Instance.new("Frame")
     CenterLogoBox.Size = UDim2.new(0, 56, 0, 56)
     CenterLogoBox.Position = UDim2.new(0.5, -28, 0, 56)
@@ -559,7 +559,7 @@ OpenKeySystemUI = function()
     local CenterLogoImg = Instance.new("ImageLabel")
     CenterLogoImg.Size = UDim2.new(1, 0, 1, 0)
     CenterLogoImg.BackgroundTransparency = 1
-    CenterLogoImg.Image = ChilliAvatarId
+    CenterLogoImg.Image = ChilliAvatarId[span_8](start_span)[span_8](end_span)
     CenterLogoImg.ScaleType = Enum.ScaleType.Crop
     CenterLogoImg.ZIndex = 32
     CenterLogoImg.Parent = CenterLogoBox
@@ -628,7 +628,7 @@ OpenKeySystemUI = function()
     QuickPasteStroke.Color = Color3.fromRGB(150, 40, 60)
     -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/5)
---   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (DÙNG ẢNH HỘP QUÀ BÊN TRONG)
+--   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (DÙNG ẢNH HỘP QUÀ BÊN TRONG)[span_9](start_span)[span_9](end_span)
 -- =========================================================================
 
     local ButtonsRow = Instance.new("Frame")
@@ -736,7 +736,7 @@ OpenKeySystemUI = function()
     StatusMsg.ZIndex = 31
     StatusMsg.Parent = MainFrame
 
-    -- MODAL HỘP QUÀ GACHA (DÙNG HÌNH HỘP QUÀ GiftBoxAssetId)
+    -- MODAL HỘP QUÀ GACHA (DÙNG HÌNH HỘP QUÀ GiftBoxAssetId)[span_10](start_span)[span_10](end_span)
     local GachaModal = Instance.new("Frame")
     GachaModal.Name = "GachaModal"
     GachaModal.Size = UDim2.new(1, 0, 1, 0)
@@ -840,7 +840,7 @@ OpenKeySystemUI = function()
         GiftImage.Size = UDim2.new(1.2, 0, 1.2, 0)
         GiftImage.Position = UDim2.new(0.5, 0, 0.5, 0)
         GiftImage.BackgroundTransparency = 1
-        GiftImage.Image = GiftBoxAssetId -- Đúng hình hộp quà GiftBoxAssetId
+        GiftImage.Image = GiftBoxAssetId -- Đúng hình hộp quà GiftBoxAssetId[span_11](start_span)[span_11](end_span)
         GiftImage.ScaleType = Enum.ScaleType.Fit
         GiftImage.ZIndex = 49
         GiftImage.Parent = CropMask
