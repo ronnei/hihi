@@ -1,6 +1,6 @@
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/5)
---   CẤU HÌNH HỆ THỐNG · PRELOAD ASSET · XỬ LÝ CHU KỲ 00:00 GMT+7
+--   CẤU HÌNH HỆ THỐNG · PRELOAD ASSET ĐÚNG VỊ TRÍ · 00:00 GMT+7
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -15,8 +15,8 @@ local KeyUrl = "https://link4m.net/m2JAFv"
 local TutorialUrl = "https://craftvip.github.io/free/getkey.html"
 local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chilliv5beta.lua"
 
-local GiftBoxAssetId = "rbxassetid://92622270383869" -- Hình hộp quà cho 2 hộp gacha
-local ChilliAvatarId = "rbxassetid://115116611981430" -- Hình quả ớt cho Avatar chính & Header
+local GiftBoxAssetId = "rbxassetid://92622270383869"  -- Hình hộp quà cho 2 hộp gacha bên trong
+local ChilliAvatarId = "rbxassetid://115116611981430" -- Hình quả ớt cho Avatar chính giữa & Header
 
 local KeyFileName = "ChilliV5_KeyData.json"
 local TrialFileName = "ChilliV5_TrialData.json"
@@ -29,7 +29,7 @@ local ActiveBlurEffect = nil
 local InputBlockerScreen = nil
 local OpenKeySystemUI = nil
 
--- TẢI TRƯỚC HÌNH ẢNH VÀO RAM ĐỂ HIỂN THỊ TỨC THÌ
+-- TẢI TRƯỚC HÌNH ẢNH VÀO RAM
 task.spawn(function()
     pcall(function()
         ContentProvider:PreloadAsync({ GiftBoxAssetId, ChilliAvatarId })
@@ -382,7 +382,7 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, color: C
 end
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 3/5)
---   GIAO DIỆN CHÍNH DARK MATTE · AVATAR ỚT CHÍNH GIỮA · PHÓNG XA 480x500
+--   GIAO DIỆN CHÍNH DARK MATTE · AVATAR ỚT ĐÚNG VỊ TRÍ · PHÓNG XA 480x500
 -- =========================================================================
 
 local Languages = {
@@ -468,14 +468,14 @@ OpenKeySystemUI = function()
     Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 24)
 
     local MainScale = Instance.new("UIScale", MainFrame)
-    MainScale.Scale = 0.55 -- Phóng ra to vừa mắt nhìn thấy toàn bộ hộp quà
+    MainScale.Scale = 0.55
 
     local MainStroke = Instance.new("UIStroke", MainFrame)
     MainStroke.Thickness = 1.4
     MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     MainStroke.Color = Color3.fromRGB(225, 29, 72)
 
-    -- HEADER TOP BAR (Dùng ảnh quả ớt ChilliAvatarId thay cho icon nhỏ)
+    -- HEADER TOP BAR (Dùng ảnh quả ớt ChilliAvatarId)
     local HeaderBar = Instance.new("Frame")
     HeaderBar.Size = UDim2.new(1, -32, 0, 44)
     HeaderBar.Position = UDim2.new(0, 16, 0, 14)
@@ -543,7 +543,7 @@ OpenKeySystemUI = function()
     LangStroke.Color = Color3.fromRGB(160, 45, 65)
     LangStroke.Thickness = 1
 
-    -- LOGO AVATAR CHÍNH GIỮA (DÙNG ẢNH QUẢ ỚT ChilliAvatarId THAY CHO QUẢ TRỨNG)
+    -- LOGO AVATAR CHÍNH GIỮA (DÙNG ẢNH QUẢ ỚT ChilliAvatarId)
     local CenterLogoBox = Instance.new("Frame")
     CenterLogoBox.Size = UDim2.new(0, 56, 0, 56)
     CenterLogoBox.Position = UDim2.new(0.5, -28, 0, 56)
@@ -628,7 +628,7 @@ OpenKeySystemUI = function()
     QuickPasteStroke.Color = Color3.fromRGB(150, 40, 60)
     -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/5)
---   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (80% GETKEY - 20% NOKEY)
+--   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (DÙNG ẢNH HỘP QUÀ BÊN TRONG)
 -- =========================================================================
 
     local ButtonsRow = Instance.new("Frame")
@@ -736,7 +736,7 @@ OpenKeySystemUI = function()
     StatusMsg.ZIndex = 31
     StatusMsg.Parent = MainFrame
 
-    -- MODAL HỘP QUÀ GACHA (BÊN TRONG DÙNG HÌNH HỘP QUÀ 92622270383869)
+    -- MODAL HỘP QUÀ GACHA (DÙNG HÌNH HỘP QUÀ GiftBoxAssetId)
     local GachaModal = Instance.new("Frame")
     GachaModal.Name = "GachaModal"
     GachaModal.Size = UDim2.new(1, 0, 1, 0)
@@ -840,7 +840,7 @@ OpenKeySystemUI = function()
         GiftImage.Size = UDim2.new(1.2, 0, 1.2, 0)
         GiftImage.Position = UDim2.new(0.5, 0, 0.5, 0)
         GiftImage.BackgroundTransparency = 1
-        GiftImage.Image = GiftBoxAssetId
+        GiftImage.Image = GiftBoxAssetId -- Đúng hình hộp quà GiftBoxAssetId
         GiftImage.ScaleType = Enum.ScaleType.Fit
         GiftImage.ZIndex = 49
         GiftImage.Parent = CropMask
