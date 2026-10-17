@@ -1,6 +1,6 @@
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/5)
---   PRELOAD ASSET 92622270383869 · TỈ LỆ 80% GETKEY / 20% NOKEY · 00:00 GMT+7
+--   CẤU HÌNH HỆ THỐNG · PRELOAD ASSET · XỬ LÝ CHU KỲ 00:00 GMT+7
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -14,7 +14,9 @@ local LocalPlayer = Players.LocalPlayer
 local KeyUrl = "https://link4m.net/m2JAFv"
 local TutorialUrl = "https://craftvip.github.io/free/getkey.html"
 local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chilliv5beta.lua"
-local GiftBoxAssetId = "rbxassetid://92622270383869"
+
+local GiftBoxAssetId = "rbxassetid://92622270383869" -- Hình hộp quà cho 2 hộp gacha
+local ChilliAvatarId = "rbxassetid://115116611981430" -- Hình quả ớt cho Avatar chính & Header
 
 local KeyFileName = "ChilliV5_KeyData.json"
 local TrialFileName = "ChilliV5_TrialData.json"
@@ -27,10 +29,10 @@ local ActiveBlurEffect = nil
 local InputBlockerScreen = nil
 local OpenKeySystemUI = nil
 
--- TẢI TRƯỚC HÌNH ẢNH HỘP QUÀ VÀO RAM ĐỂ HIỂN THỊ TỨC THÌ
+-- TẢI TRƯỚC HÌNH ẢNH VÀO RAM ĐỂ HIỂN THỊ TỨC THÌ
 task.spawn(function()
     pcall(function()
-        ContentProvider:PreloadAsync({ GiftBoxAssetId })
+        ContentProvider:PreloadAsync({ GiftBoxAssetId, ChilliAvatarId })
     end)
 end)
 
@@ -380,7 +382,7 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, color: C
 end
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 3/5)
---   GIAO DIỆN DARK MATTE · PHÓNG XA CÂN ĐỐI · CHỮ V5 CHUẨN XÁC
+--   GIAO DIỆN CHÍNH DARK MATTE · AVATAR ỚT CHÍNH GIỮA · PHÓNG XA 480x500
 -- =========================================================================
 
 local Languages = {
@@ -453,7 +455,6 @@ OpenKeySystemUI = function()
     pcall(function() ScreenGui.Parent = CoreGui end)
     if not ScreenGui.Parent then ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
-    -- Phóng to khung MainFrame lên 480x500 để hiển thị cực kỳ thoáng đãng, không bị chật chội
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -467,14 +468,14 @@ OpenKeySystemUI = function()
     Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 24)
 
     local MainScale = Instance.new("UIScale", MainFrame)
-    MainScale.Scale = 0.55 -- Tỉ lệ scale phóng xa vừa mắt nhìn thấy toàn bộ hộp quà và nút bấm
+    MainScale.Scale = 0.55 -- Phóng ra to vừa mắt nhìn thấy toàn bộ hộp quà
 
     local MainStroke = Instance.new("UIStroke", MainFrame)
     MainStroke.Thickness = 1.4
     MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     MainStroke.Color = Color3.fromRGB(225, 29, 72)
 
-    -- HEADER TOP BAR
+    -- HEADER TOP BAR (Dùng ảnh quả ớt ChilliAvatarId thay cho icon nhỏ)
     local HeaderBar = Instance.new("Frame")
     HeaderBar.Size = UDim2.new(1, -32, 0, 44)
     HeaderBar.Position = UDim2.new(0, 16, 0, 14)
@@ -486,6 +487,7 @@ OpenKeySystemUI = function()
     MiniLogo.Size = UDim2.new(0, 30, 0, 30)
     MiniLogo.Position = UDim2.new(0, 0, 0.5, -15)
     MiniLogo.BackgroundColor3 = Color3.fromRGB(26, 8, 14)
+    MiniLogo.ClipsDescendants = true
     MiniLogo.ZIndex = 32
     MiniLogo.Parent = HeaderBar
     Instance.new("UICorner", MiniLogo).CornerRadius = UDim.new(1, 0)
@@ -493,13 +495,13 @@ OpenKeySystemUI = function()
     MiniLogoStroke.Color = Color3.fromRGB(225, 29, 72)
     MiniLogoStroke.Thickness = 1.2
 
-    local MiniLogoTxt = Instance.new("TextLabel")
-    MiniLogoTxt.Size = UDim2.new(1, 0, 1, 0)
-    MiniLogoTxt.BackgroundTransparency = 1
-    MiniLogoTxt.Text = "🌶️"
-    MiniLogoTxt.TextSize = 14
-    MiniLogoTxt.ZIndex = 33
-    MiniLogoTxt.Parent = MiniLogo
+    local MiniLogoImg = Instance.new("ImageLabel")
+    MiniLogoImg.Size = UDim2.new(1, 0, 1, 0)
+    MiniLogoImg.BackgroundTransparency = 1
+    MiniLogoImg.Image = ChilliAvatarId
+    MiniLogoImg.ScaleType = Enum.ScaleType.Crop
+    MiniLogoImg.ZIndex = 33
+    MiniLogoImg.Parent = MiniLogo
 
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(1, -110, 0, 18)
@@ -541,11 +543,12 @@ OpenKeySystemUI = function()
     LangStroke.Color = Color3.fromRGB(160, 45, 65)
     LangStroke.Thickness = 1
 
-    -- LOGO TRUNG TÂM
+    -- LOGO AVATAR CHÍNH GIỮA (DÙNG ẢNH QUẢ ỚT ChilliAvatarId THAY CHO QUẢ TRỨNG)
     local CenterLogoBox = Instance.new("Frame")
     CenterLogoBox.Size = UDim2.new(0, 56, 0, 56)
     CenterLogoBox.Position = UDim2.new(0.5, -28, 0, 56)
     CenterLogoBox.BackgroundColor3 = Color3.fromRGB(24, 7, 13)
+    CenterLogoBox.ClipsDescendants = true
     CenterLogoBox.ZIndex = 31
     CenterLogoBox.Parent = MainFrame
     Instance.new("UICorner", CenterLogoBox).CornerRadius = UDim.new(0, 16)
@@ -553,13 +556,13 @@ OpenKeySystemUI = function()
     CenterLogoStroke.Color = Color3.fromRGB(225, 29, 72)
     CenterLogoStroke.Thickness = 1.2
 
-    local CenterLogoTxt = Instance.new("TextLabel")
-    CenterLogoTxt.Size = UDim2.new(1, 0, 1, 0)
-    CenterLogoTxt.BackgroundTransparency = 1
-    CenterLogoTxt.Text = "🥚"
-    CenterLogoTxt.TextSize = 28
-    CenterLogoTxt.ZIndex = 32
-    CenterLogoTxt.Parent = CenterLogoBox
+    local CenterLogoImg = Instance.new("ImageLabel")
+    CenterLogoImg.Size = UDim2.new(1, 0, 1, 0)
+    CenterLogoImg.BackgroundTransparency = 1
+    CenterLogoImg.Image = ChilliAvatarId
+    CenterLogoImg.ScaleType = Enum.ScaleType.Crop
+    CenterLogoImg.ZIndex = 32
+    CenterLogoImg.Parent = CenterLogoBox
 
     local CenterTitle = Instance.new("TextLabel")
     CenterTitle.Size = UDim2.new(1, -30, 0, 20)
@@ -625,7 +628,7 @@ OpenKeySystemUI = function()
     QuickPasteStroke.Color = Color3.fromRGB(150, 40, 60)
     -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/5)
---   CỤM NÚT TÁC VỤ · MODAL HỘP QUÀ GACHA (80% GETKEY - 20% NOKEY)
+--   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (80% GETKEY - 20% NOKEY)
 -- =========================================================================
 
     local ButtonsRow = Instance.new("Frame")
@@ -733,7 +736,7 @@ OpenKeySystemUI = function()
     StatusMsg.ZIndex = 31
     StatusMsg.Parent = MainFrame
 
-    -- MODAL HỘP QUÀ GACHA
+    -- MODAL HỘP QUÀ GACHA (BÊN TRONG DÙNG HÌNH HỘP QUÀ 92622270383869)
     local GachaModal = Instance.new("Frame")
     GachaModal.Name = "GachaModal"
     GachaModal.Size = UDim2.new(1, 0, 1, 0)
@@ -819,7 +822,6 @@ OpenKeySystemUI = function()
         TagStroke.Color = Color3.fromRGB(210, 50, 80)
         TagStroke.Thickness = 1
 
-        -- Mặt nạ cắt CropMask căn chỉnh đúng hình hộp quà 92622270383869
         local CropMask = Instance.new("Frame")
         CropMask.Name = "CropMask"
         CropMask.AnchorPoint = Vector2.new(0.5, 0)
