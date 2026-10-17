@@ -1,6 +1,6 @@
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/5)
---   CẤU HÌNH HỆ THỐNG · PRELOAD ASSET ĐÚNG ID · CHU KỲ 00:00 GMT+7
+--   CẤU HÌNH HỆ THỐNG · SCRIPT GỐC LUAUFORGE MỚI · CHU KỲ 00:00 GMT+7
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -13,7 +13,7 @@ local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
 local KeyUrl = "https://link4m.net/m2JAFv"
 local TutorialUrl = "https://craftvip.github.io/free/getkey.html"
-local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chilliv5beta.lua"
+local TargetScriptUrl = "https://luauforge-antiraw.netlify.app/raw/b2GaCbtITNxIA6Qayyauq1a"
 
 local ChilliAvatarId = "rbxassetid://92622270383869"  -- Hình quả ớt cho Menu Get Key bên ngoài
 local GiftBoxAssetId = "rbxassetid://115116611981430" -- Hình hộp quà cho Mini-game bên trong
@@ -453,7 +453,6 @@ OpenKeySystemUI = function()
     pcall(function() ScreenGui.Parent = CoreGui end)
     if not ScreenGui.Parent then ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
-    -- Khung menu chính: Kích thước to rõ chuẩn điện thoại, không thu nhỏ
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -467,7 +466,7 @@ OpenKeySystemUI = function()
     Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 18)
 
     local MainScale = Instance.new("UIScale", MainFrame)
-    MainScale.Scale = 1.0 -- Tỷ lệ 1.0 chuẩn xác, không bị co nhỏ
+    MainScale.Scale = 1.0
 
     local MainStroke = Instance.new("UIStroke", MainFrame)
     MainStroke.Thickness = 1
@@ -626,7 +625,7 @@ OpenKeySystemUI = function()
     QuickPasteBtn.ZIndex = 33
     QuickPasteBtn.Parent = InputContainer
     Instance.new("UICorner", QuickPasteBtn).CornerRadius = UDim.new(0, 6)
-  -- =========================================================================
+    -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/5)
 --   NÚT HỘP QUÀ TỐI GIẢN KHÔNG CHÓI · HỘP QUÀ PHÓNG XA NHÌN RÕ TOÀN THÂN
 -- =========================================================================
@@ -829,7 +828,6 @@ OpenKeySystemUI = function()
         CropMask.ZIndex = 48
         CropMask.Parent = BoxCard
 
-        -- Tỉ lệ 0.85 giúp thu nhỏ góc nhìn lùi lại, nhìn rõ từ đỉnh nơ đến đáy hộp quà
         local GiftImage = Instance.new("ImageLabel")
         GiftImage.Name = "GiftImage"
         GiftImage.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -886,7 +884,7 @@ OpenKeySystemUI = function()
     GachaResultBanner.ZIndex = 46
     GachaResultBanner.Parent = GachaModal
     Instance.new("UICorner", GachaResultBanner).CornerRadius = UDim.new(0, 10)
-  -- =========================================================================
+    -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 5/5)
 --   BACKEND TỈ LỆ 80% GETKEY - 20% NOKEY · ĐỔI NGÔN NGỮ · LUỒNG DÙNG THỬ
 -- =========================================================================
@@ -1098,7 +1096,7 @@ OpenKeySystemUI = function()
             local offsets = { -6, 6, -4, 4, -2, 2, 0 }
             task.spawn(function()
                 for _, off in ipairs(offsets) do
-                    local t = TweenService:Create(MainFrame, TweenInfo.new(0.04, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    local t = TweenService:Create(MainFrame, TweenInfo.new(0.04, Enum.EasingStyle.Quad), {
                         Position = UDim2.new(0.5, off, 0.5, 0)
                     })
                     t:Play()
