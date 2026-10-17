@@ -9,19 +9,37 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <!-- Xóa ngay ?pass= khỏi thanh địa chỉ để chống Chrome lưu lịch sử gợi ý -->
+    <!-- CƠ CHẾ ONE-TIME TOKEN: XÓA URL NGAY LẬP TỨC & CHỈ CHO PHÉP DÙNG 1 LẦN DUY NHẤT -->
     <script>
+        window.__CHILLI_V5_AUTHORIZED = false;
+
         (function() {
             try {
                 const url = new URL(window.location.href);
                 const pass = url.searchParams.get("pass");
                 const VALID_PASS = ["chilli", "chilliv5", "chillihubv5", "ronnei", "ronnei2026"];
 
+                // 1. Nếu đi từ link rút gọn vào có ?pass= hợp lệ:
                 if (pass && VALID_PASS.includes(pass)) {
-                    sessionStorage.setItem("ChilliV5_Session", "VERIFIED_" + Date.now());
+                    // Xóa sạch ?pass= khỏi thanh địa chỉ ngay lập tức
                     window.history.replaceState(null, document.title, window.location.pathname);
+
+                    // Kiểm tra xem trình duyệt có đang bấm Reload (F5) lại URL cũ không
+                    const navEntries = performance.getEntriesByType && performance.getEntriesByType("navigation");
+                    const isReload = (navEntries && navEntries.length > 0 && navEntries[0].type === "reload") ||
+                                     (window.performance && performance.navigation && performance.navigation.type === 1);
+
+                    if (!isReload) {
+                        window.__CHILLI_V5_AUTHORIZED = true;
+                    }
                 }
-            } catch (e) {}
+
+                // 2. Xóa hoàn toàn mọi dữ liệu lưu trữ cũ để chống giữ phiên khi F5
+                sessionStorage.removeItem("ChilliV5_Session");
+                localStorage.removeItem("ChilliV5_Session");
+            } catch (e) {
+                window.__CHILLI_V5_AUTHORIZED = false;
+            }
         })();
     </script>
 
@@ -34,7 +52,6 @@
             --bg-card: #11131a;
             --bg-input: #0b0c10;
             --border-subtle: #222634;
-            --border-focus: #e11d48;
             --accent-primary: #e11d48;
             --accent-hover: #be123c;
             --text-main: #f8fafc;
@@ -64,7 +81,6 @@
             color: var(--text-main);
         }
 
-        /* Màn hình chặn khi chưa vượt link */
         .restricted-box {
             width: 100%;
             max-width: 390px;
@@ -74,7 +90,8 @@
             padding: 36px 24px;
             text-align: center;
             display: none;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+            animation: slideUp 0.25s ease-out;
         }
 
         .restricted-icon {
@@ -109,12 +126,12 @@
             font-weight: 600;
             color: #fb7185;
             background: rgba(225, 29, 72, 0.08);
-            padding: 10px 14px;
+            padding: 12px 14px;
             border-radius: 10px;
             border: 1px solid rgba(225, 29, 72, 0.2);
+            line-height: 1.5;
         }
 
-        /* Thẻ chính Chilli Hub V5 */
         .main-card {
             width: 100%;
             max-width: 400px;
@@ -132,7 +149,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Phần đầu thẻ (Header) */
         .card-header {
             display: flex;
             align-items: center;
@@ -194,7 +210,6 @@
             border-radius: 50%;
         }
 
-        /* Thông số thời gian */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -227,7 +242,6 @@
             color: #fb7185;
         }
 
-        /* Khung nhận Key */
         .field-label {
             display: flex;
             align-items: center;
@@ -244,9 +258,7 @@
             color: var(--text-dim);
         }
 
-        .state-tag.ready {
-            color: var(--success);
-        }
+        .state-tag.ready { color: var(--success); }
 
         .key-box {
             background: var(--bg-input);
@@ -299,7 +311,6 @@
         .primary-btn:active { transform: scale(0.985); }
         .primary-btn.copied { background: var(--success); }
 
-        /* Khung Script Loader */
         .script-container {
             background: var(--bg-input);
             border: 1px solid var(--border-subtle);
@@ -330,7 +341,6 @@
             font-size: 11px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.15s;
         }
 
         .copy-small-btn:active { transform: scale(0.96); }
@@ -345,7 +355,6 @@
             padding-top: 4px;
         }
 
-        /* Chân trang */
         .card-footer {
             display: flex;
             align-items: center;
@@ -365,7 +374,6 @@
             cursor: pointer;
         }
 
-        /* Thông báo nổi (Toast) */
         .toast-popup {
             position: fixed;
             bottom: -60px;
@@ -390,15 +398,15 @@
 </head>
 <body>
 
-    <!-- MÀN HÌNH CHẶN KHI TRUY CẬP TRỰC TIẾP KHÔNG QUA LINK RÚT GỌN -->
+    <!-- MÀN HÌNH CHẶN KHI RELOAD (F5) HOẶC VÀO LẠI TỪ LỊCH SỬ / BOOKMARK -->
     <div class="restricted-box" id="deniedScreen">
         <div class="restricted-icon">🔒</div>
-        <div class="restricted-title">Chưa xác thực truy cập</div>
+        <div class="restricted-title">Phiên truy cập đã đóng</div>
         <p class="restricted-desc">
-            Phiên làm việc đã hết hạn hoặc bạn đang mở trực tiếp từ lịch sử trình duyệt.
+            Mỗi lượt vượt link chỉ được phép truy cập <b>1 lần duy nhất</b>. Tải lại trang (Reload) hoặc mở từ lịch sử trình duyệt đều bị từ chối.
         </p>
         <div class="restricted-note">
-            Vui lòng vào lại menu Chilli Hub V5 trong game và bấm "Lấy Key" để tiếp tục.
+            Vui lòng mở lại menu Chilli Hub V5 trong Roblox và bấm "Lấy Key" để tạo phiên mới.
         </div>
     </div>
 
@@ -430,7 +438,7 @@
         </div>
 
         <div class="field-label">
-            <span>Mã Key của bạn</span>
+            <span>Mã Key của bạn (Phiên 1 lần)</span>
             <span class="state-tag" id="keyStateTag">Chưa tạo</span>
         </div>
 
@@ -451,7 +459,7 @@
         </div>
 
         <div class="card-footer">
-            <span>Tự động đổi mã lúc 00:00 (GMT+7)</span>
+            <span>Không tải lại trang khi chưa chép Key!</span>
             <button class="audio-toggle" id="sfxToggle" onclick="toggleAudio()">Âm thanh: Bật</button>
         </div>
     </div>
@@ -459,20 +467,51 @@
     <div class="toast-popup" id="toastPopup">Đã sao chép vào bộ nhớ tạm</div>
         <script>
         // =========================================================================
-        //  1. KIỂM TRA PHIÊN HỢP LỆ (CHỐNG LƯU URL GỢI Ý TRÊN CHROME)
+        //  1. KIỂM SOÁT CHỐNG TRUY CẬP LẠI (ANTI-RELOAD / ANTI-BFCACHE / TIMEOUT)
         // =========================================================================
-        const hasValidSession = sessionStorage.getItem("ChilliV5_Session");
+        const mainScreen = document.getElementById('mainScreen');
+        const deniedScreen = document.getElementById('deniedScreen');
 
-        if (hasValidSession) {
-            document.getElementById('mainScreen').style.display = 'block';
-            document.getElementById('deniedScreen').style.display = 'none';
-        } else {
-            document.getElementById('deniedScreen').style.display = 'block';
-            document.getElementById('mainScreen').style.display = 'none';
+        function lockAccessImmediately() {
+            window.__CHILLI_V5_AUTHORIZED = false;
+            mainScreen.style.display = 'none';
+            deniedScreen.style.display = 'block';
+            // Xóa trắng mã key trên DOM để không thể inspect lại
+            const kd = document.getElementById('keyDisplay');
+            if (kd) kd.innerText = "SESSION EXPIRED";
         }
 
+        // Chỉ mở khi biến RAM thực sự hợp lệ ở lần load đầu tiên
+        if (window.__CHILLI_V5_AUTHORIZED === true) {
+            mainScreen.style.display = 'block';
+            deniedScreen.style.display = 'none';
+            // Đốt cờ ngay sau khi render để không thể gọi lại
+            window.__CHILLI_V5_AUTHORIZED = false;
+        } else {
+            lockAccessImmediately();
+        }
+
+        // Chặn tuyệt đối việc bấm nút Back/Forward trên trình duyệt di động (BFCache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                lockAccessImmediately();
+            }
+        });
+
+        // Chặn việc người dùng giữ tab treo ngầm quá 3 phút rồi mở lại
+        let hiddenTimestamp = 0;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                hiddenTimestamp = Date.now();
+            } else {
+                if (hiddenTimestamp > 0 && (Date.now() - hiddenTimestamp > 180000)) {
+                    lockAccessImmediately();
+                }
+            }
+        });
+
         // =========================================================================
-        //  2. ÂM THANH PHẢN HỒI TỐI GIẢN
+        //  2. ÂM THANH PHẢN HỒI
         // =========================================================================
         let soundEnabled = true;
         let keyUnlocked = false;
@@ -523,7 +562,6 @@
             const month = vn.getMonth() + 1;
             const year = vn.getFullYear();
 
-            // Công thức băm riêng cho phiên bản Chilli Hub V5
             const v1 = (day * 4339 + month * 3187 + year * 173) % 65535;
             const v2 = (day * 6823 + month * 4931 + year * 293) % 65535;
             const v3 = (day * 8513 + month * 7109 + year * 431) % 65535;
