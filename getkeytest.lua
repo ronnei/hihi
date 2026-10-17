@@ -1,6 +1,6 @@
 -- =========================================================================
---   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/5)
---   CLEAN MINIMALIST UI · CẮT VIỀN HỘP QUÀ · CHU KỲ 00:00 GMT+7
+--   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/5)
+--   PRELOAD ASSET HỘP QUÀ · TỈ LỆ 80% GETKEY / 20% NOKEY · CHU KỲ 00:00 GMT+7
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -11,15 +11,15 @@ local Players = game:GetService("Players")
 local Lighting = game:GetService("Lighting")
 
 local LocalPlayer = Players.LocalPlayer
-local KeyUrl = "https://link4m.net/80x8y"
+local KeyUrl = "https://link4m.net/m2JAFv"
 local TutorialUrl = "https://craftvip.github.io/free/getkey.html"
-local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chillihubv2.lua"
+local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chilliv5beta.lua"
 local GiftBoxAssetId = "rbxassetid://138733048851803"
 
-local KeyFileName = "ChilliV2_KeyData.json"
-local TrialFileName = "ChilliV2_TrialData.json"
-local GachaFileName = "ChilliV2_GachaData.json"
-local TRIAL_DURATION = 120 -- Dùng thử 2 phút (120 giây)
+local KeyFileName = "ChilliV5_KeyData.json"
+local TrialFileName = "ChilliV5_TrialData.json"
+local GachaFileName = "ChilliV5_GachaData.json"
+local TRIAL_DURATION = 120 -- Thời gian dùng thử 2 phút (120 giây)
 
 local InitialGuis = {}
 local ScriptConnections = {}
@@ -27,14 +27,14 @@ local ActiveBlurEffect = nil
 local InputBlockerScreen = nil
 local OpenKeySystemUI = nil
 
--- Nạp trước hình ảnh hộp quà vào RAM để hiển thị tức thì
+-- TẢI TRƯỚC HÌNH ẢNH HỘP QUÀ VÀO BỘ NHỚ RAM ĐỂ HIỂN THỊ TỨC THÌ
 task.spawn(function()
     pcall(function()
         ContentProvider:PreloadAsync({ GiftBoxAssetId })
     end)
 end)
 
--- MODULE MÃ HÓA HEX-XOR BẢO VỆ FILE LƯU
+-- MODULE MÃ HÓA BẢO MẬT DỮ LIỆU CỤC BỘ
 local CIPHER_KEY = 127
 
 local function EncryptData(str: string): string
@@ -55,7 +55,6 @@ local function DecryptData(hexStr: string): string?
     return table.concat(res)
 end
 
--- ĐỒNG BỘ MÚI GIỜ VIỆT NAM GMT+7 (RESET LÚC 00:00)
 local function GetCurrentDateGMT7(): string
     local vnTime = os.time() + (7 * 3600)
     local d = os.date("!*t", vnTime)
@@ -147,17 +146,17 @@ local function Save24hKey(customDuration: number?)
     end
 end
 
-local function VerifyChilliV2Key(rawInput: string): boolean
+local function VerifyChilliV5Key(rawInput: string): boolean
     if not rawInput or rawInput == "" then return false end
     local clean = string.lower(string.gsub(rawInput, "[%s%c]", ""))
-    clean = clean:gsub("^chillihubv2%-", ""):gsub("^chilliv2%-", "")
+    clean = clean:gsub("^chillihubv5%-", ""):gsub("^chilliv5beta%-", ""):gsub("^chilliv5%-", "")
 
     local vnTime = os.time() + (7 * 3600)
     for _, t in ipairs({ vnTime, vnTime - 86400, vnTime + 3600 }) do
         local d = os.date("!*t", t)
-        local v1 = (d.day * 3617 + d.month * 2851 + d.year * 149) % 65535
-        local v2 = (d.day * 6211 + d.month * 4397 + d.year * 269) % 65535
-        local v3 = (d.day * 7919 + d.month * 6571 + d.year * 409) % 65535
+        local v1 = (d.day * 4339 + d.month * 3187 + d.year * 173) % 65535
+        local v2 = (d.day * 6823 + d.month * 4931 + d.year * 293) % 65535
+        local v3 = (d.day * 8513 + d.month * 7109 + d.year * 431) % 65535
         if clean == string.format("%04x-%04x-%04x", v1, v2, v3) then
             return true
         end
@@ -165,8 +164,8 @@ local function VerifyChilliV2Key(rawInput: string): boolean
     return false
 end
 -- =========================================================================
---   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 2/5)
---   SNAPSHOT UI · KHÓA MÀN HÌNH · THÔNG BÁO TRạng THÁI HIỆN ĐẠI
+--   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 2/5)
+--   SNAPSHOT QUẢN LÝ UI · KHÓA MÀN HÌNH BẢO MẬT · LIVE TOAST THỜI GIAN THỰC
 -- =========================================================================
 
 local function TakeGuiSnapshot()
@@ -184,8 +183,8 @@ end
 local function ApplyScreenLockdown()
     if not ActiveBlurEffect then
         ActiveBlurEffect = Instance.new("BlurEffect")
-        ActiveBlurEffect.Name = "ChilliV2_LockdownBlur"
-        ActiveBlurEffect.Size = 24
+        ActiveBlurEffect.Name = "ChilliV5_LockdownBlur"
+        ActiveBlurEffect.Size = 28
         ActiveBlurEffect.Parent = Lighting
     end
 
@@ -205,15 +204,16 @@ local function ApplyScreenLockdown()
 
     if not InputBlockerScreen then
         InputBlockerScreen = Instance.new("ScreenGui")
-        InputBlockerScreen.Name = "ChilliV2_InputBlocker"
+        InputBlockerScreen.Name = "ChilliV5_InputBlocker"
         InputBlockerScreen.ResetOnSpawn = false
         pcall(function() InputBlockerScreen.Parent = CoreGui end)
         if not InputBlockerScreen.Parent then InputBlockerScreen.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
         local shield = Instance.new("TextButton")
         shield.Size = UDim2.new(1, 0, 1, 0)
-        shield.BackgroundColor3 = Color3.fromRGB(8, 9, 12)
-        shield.BackgroundTransparency = 0.4
+        shield.Position = UDim2.new(0, 0, 0, 0)
+        shield.BackgroundColor3 = Color3.fromRGB(12, 5, 8)
+        shield.BackgroundTransparency = 0.45
         shield.Text = ""
         shield.AutoButtonColor = false
         shield.Active = true
@@ -247,8 +247,8 @@ local function RemoveScreenLockdown()
 end
 
 local function TerminateTargetScript()
-    getgenv().ChilliV2_Active = false
-    getgenv().ChilliV2_TrialExpired = true
+    getgenv().ChilliV5_Active = false
+    getgenv().ChilliV5_TrialExpired = true
 
     for _, conn in ipairs(ScriptConnections) do
         if typeof(conn) == "RBXScriptConnection" and conn.Connected then
@@ -261,7 +261,7 @@ local function TerminateTargetScript()
     for _, c in ipairs(containers) do
         if c then
             for _, child in ipairs(c:GetChildren()) do
-                if not InitialGuis[child] and child.Name ~= "ChilliV2_GetKeyUI" and child.Name ~= "ChilliV2_ToastUI" and child.Name ~= "ChilliV2_InputBlocker" then
+                if not InitialGuis[child] and child.Name ~= "ChilliV5_GetKeyUI" and child.Name ~= "ChilliV5_ToastUI" and child.Name ~= "ChilliV5_InputBlocker" then
                     pcall(function() child:Destroy() end)
                 end
             end
@@ -271,7 +271,7 @@ end
 
 local function LaunchTargetScriptWithWatcher()
     TakeGuiSnapshot()
-    getgenv().ChilliV2_Active = true
+    getgenv().ChilliV5_Active = true
 
     task.spawn(function()
         pcall(function()
@@ -284,51 +284,51 @@ local function FormatTime(seconds: number): string
     if seconds < 0 then seconds = 0 end
     local m = math.floor(seconds / 60)
     local s = seconds % 60
-    return string.format("%02d:%02d", m, s)
+    return string.format("%02d phút %02d giây", m, s)
 end
 
 local ActiveToastLabel = nil
 
-local function ShowLiveToast(titleText: string, initialSeconds: number, accentColor: Color3)
-    if CoreGui:FindFirstChild("ChilliV2_ToastUI") then CoreGui.ChilliV2_ToastUI:Destroy() end
-    if LocalPlayer:FindFirstChild("PlayerGui") and LocalPlayer.PlayerGui:FindFirstChild("ChilliV2_ToastUI") then
-        LocalPlayer.PlayerGui.ChilliV2_ToastUI:Destroy()
+local function ShowLiveToast(titleText: string, initialSeconds: number, color: Color3)
+    if CoreGui:FindFirstChild("ChilliV5_ToastUI") then CoreGui.ChilliV5_ToastUI:Destroy() end
+    if LocalPlayer:FindFirstChild("PlayerGui") and LocalPlayer.PlayerGui:FindFirstChild("ChilliV5_ToastUI") then
+        LocalPlayer.PlayerGui.ChilliV5_ToastUI:Destroy()
     end
 
     local ToastGui = Instance.new("ScreenGui")
-    ToastGui.Name = "ChilliV2_ToastUI"
+    ToastGui.Name = "ChilliV5_ToastUI"
     ToastGui.ResetOnSpawn = false
     pcall(function() ToastGui.Parent = CoreGui end)
     if not ToastGui.Parent then ToastGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
     local ToastFrame = Instance.new("Frame")
-    ToastFrame.Size = UDim2.new(0, 340, 0, 62)
-    ToastFrame.Position = UDim2.new(0.5, -170, 0, -80)
-    ToastFrame.BackgroundColor3 = Color3.fromRGB(15, 17, 23)
+    ToastFrame.Size = UDim2.new(0, 385, 0, 72)
+    ToastFrame.Position = UDim2.new(0.5, -192, 0, -100)
+    ToastFrame.BackgroundColor3 = Color3.fromRGB(18, 6, 11)
     ToastFrame.BorderSizePixel = 0
     ToastFrame.ZIndex = 50
     ToastFrame.Parent = ToastGui
 
-    Instance.new("UICorner", ToastFrame).CornerRadius = UDim.new(0, 14)
+    Instance.new("UICorner", ToastFrame).CornerRadius = UDim.new(0, 16)
     local Stroke = Instance.new("UIStroke", ToastFrame)
-    Stroke.Thickness = 1.2
-    Stroke.Color = accentColor or Color3.fromRGB(225, 29, 72)
+    Stroke.Thickness = 1.4
+    Stroke.Color = color or Color3.fromRGB(225, 29, 72)
 
     local Icon = Instance.new("TextLabel")
-    Icon.Size = UDim2.new(0, 36, 1, 0)
-    Icon.Position = UDim2.new(0, 8, 0, 0)
+    Icon.Size = UDim2.new(0, 42, 1, 0)
+    Icon.Position = UDim2.new(0, 10, 0, 0)
     Icon.BackgroundTransparency = 1
     Icon.Text = "🌶️"
-    Icon.TextSize = 18
+    Icon.TextSize = 22
     Icon.ZIndex = 51
     Icon.Parent = ToastFrame
 
     local Title = Instance.new("TextLabel")
-    Title.Size = UDim2.new(1, -55, 0, 18)
-    Title.Position = UDim2.new(0, 44, 0, 10)
+    Title.Size = UDim2.new(1, -65, 0, 20)
+    Title.Position = UDim2.new(0, 52, 0, 12)
     Title.BackgroundTransparency = 1
     Title.Text = titleText
-    Title.TextColor3 = Color3.fromRGB(248, 250, 252)
+    Title.TextColor3 = color or Color3.fromRGB(250, 205, 218)
     Title.TextSize = 11.5
     Title.Font = Enum.Font.GothamBold
     Title.TextXAlignment = Enum.TextXAlignment.Left
@@ -336,12 +336,12 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, accentCo
     Title.Parent = ToastFrame
 
     local Msg = Instance.new("TextLabel")
-    Msg.Size = UDim2.new(1, -55, 0, 16)
-    Msg.Position = UDim2.new(0, 44, 0, 28)
+    Msg.Size = UDim2.new(1, -65, 0, 20)
+    Msg.Position = UDim2.new(0, 52, 0, 32)
     Msg.BackgroundTransparency = 1
     Msg.Text = "Thời gian dùng thử: " .. FormatTime(initialSeconds)
-    Msg.TextColor3 = Color3.fromRGB(148, 163, 184)
-    Msg.TextSize = 10.5
+    Msg.TextColor3 = Color3.fromRGB(240, 230, 235)
+    Msg.TextSize = 11
     Msg.Font = Enum.Font.GothamMedium
     Msg.TextXAlignment = Enum.TextXAlignment.Left
     Msg.ZIndex = 51
@@ -350,26 +350,26 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, accentCo
     ActiveToastLabel = Msg
 
     local BarBg = Instance.new("Frame")
-    BarBg.Size = UDim2.new(1, -24, 0, 2)
-    BarBg.Position = UDim2.new(0, 12, 1, -5)
-    BarBg.BackgroundColor3 = Color3.fromRGB(30, 34, 45)
+    BarBg.Size = UDim2.new(1, -24, 0, 3)
+    BarBg.Position = UDim2.new(0, 12, 1, -6)
+    BarBg.BackgroundColor3 = Color3.fromRGB(35, 10, 16)
     BarBg.BorderSizePixel = 0
     BarBg.ZIndex = 51
     BarBg.Parent = ToastFrame
 
     local Bar = Instance.new("Frame")
     Bar.Size = UDim2.new(1, 0, 1, 0)
-    Bar.BackgroundColor3 = accentColor or Color3.fromRGB(225, 29, 72)
+    Bar.BackgroundColor3 = color or Color3.fromRGB(225, 29, 72)
     Bar.BorderSizePixel = 0
     Bar.ZIndex = 52
     Bar.Parent = BarBg
 
-    TweenService:Create(ToastFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, -170, 0, 18) }):Play()
+    TweenService:Create(ToastFrame, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, -192, 0, 24) }):Play()
     TweenService:Create(Bar, TweenInfo.new(10, Enum.EasingStyle.Linear), { Size = UDim2.new(0, 0, 1, 0) }):Play()
 
     task.delay(10, function()
         if ToastFrame and ToastFrame.Parent then
-            local t = TweenService:Create(ToastFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Position = UDim2.new(0.5, -170, 0, -80) })
+            local t = TweenService:Create(ToastFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Position = UDim2.new(0.5, -192, 0, -100), BackgroundTransparency = 1 })
             t:Play()
             t.Completed:Connect(function()
                 if ToastGui and ToastGui.Parent then ToastGui:Destroy() end
@@ -379,209 +379,234 @@ local function ShowLiveToast(titleText: string, initialSeconds: number, accentCo
     end)
 end
 -- =========================================================================
---   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 3/5)
---   GIAO DIỆN DARK MATTE HIỆN ĐẠI · DỄ DÀNG SỬ DỤNG · NÚT DÁN NHANH
+--   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 3/5)
+--   GIAO DIỆN CHÍNH DARK MATTE · SONG NGỮ VI/EN · TIÊU ĐỀ THEO YÊU CẦU
 -- =========================================================================
 
 local Languages = {
     VI = {
         LangBtnText = "🇻🇳 VI",
         SelectLangTitle = "Chọn ngôn ngữ hiển thị",
-        Title = "Chilli Hub V2 X Ronnei",
+        Title = "Key Steam Chilli Hub V5 - steal an egg 🥚",
         Subtitle = "chilli hub v2 được tạo bởi ronnei7.htk",
-        BadgeGame = "Steal An Egg 🥚 • Key 24 Giờ",
-        Placeholder = "Dán mã key của bạn vào đây...",
-        QuickPaste = "Dán",
-        GetKey = "Lấy Key (24 Giờ)",
-        CheckKey = "Kích Hoạt",
-        Tutorial = "📖 Hướng dẫn vượt link",
-        MiniGame = "🎁 Mở Hộp Quà (50/50)",
-        MiniGameLocked = "🔒 Đã mở quà (Reset 00:00)",
-        Notice = "Mỗi key có thời hạn sử dụng 24 tiếng. Vượt link chỉ mất khoảng 1 phút.",
-        CopiedLink = "Đã sao chép link lấy key vào bộ nhớ tạm!",
-        CopiedTutorial = "Đã sao chép link hướng dẫn vào bộ nhớ tạm!",
-        Checking = "Đang kiểm tra...",
-        CheckingMsg = "Đang xác nhận key...",
-        Success = "Key hợp lệ! Đang mở Chilli Hub V2...",
-        Error = "Key không đúng hoặc đã hết hạn 24 giờ!"
+        CenterTitle = "CHILLI HUB V5 × RONNEI",
+        CenterSub = "Steal An Egg 🥚 Edition",
+        Placeholder = "Dán mã key bản quyền tại đây...",
+        QuickPaste = "📋 Dán",
+        GetKey = "⚡ LẤY KEY (24 TIẾNG)",
+        CheckKey = "🌶️ KÍCH HOẠT V5",
+        Tutorial = "📖 Hướng dẫn vượt link lấy key",
+        MiniGame = "🎁 Mở Hộp Quà May Mắn (50/50)",
+        MiniGameLocked = "🔒 Đã mở hôm nay (Reset 00:00)",
+        Notice = "📌 Link getkey 24 tiếng thao tác nhanh gọn (chỉ 1 phút). Mỗi key có hạn sử dụng đúng 24 giờ kể từ khi kích hoạt.",
+        CopiedLink = "📋 Đã sao chép link getkey 24 tiếng vào clipboard!",
+        CopiedTutorial = "📖 Đã sao chép link hướng dẫn vào clipboard!",
+        Checking = "ĐANG XÁC THỰC...",
+        CheckingMsg = "⏳ Đang đối soát chứng chỉ trên máy chủ Chilli...",
+        Success = "✔ Xác thực thành công! Đang khởi động Chilli Hub V5...",
+        Error = "✖ Key không hợp lệ hoặc đã hết hạn 24 giờ!"
     },
     EN = {
         LangBtnText = "🇺🇸 EN",
         SelectLangTitle = "Select Display Language",
-        Title = "Chilli Hub V2 X Ronnei",
+        Title = "Key Steam Chilli Hub V5 - steal an egg 🥚",
         Subtitle = "chilli hub v2 được tạo bởi ronnei7.htk",
-        BadgeGame = "Steal An Egg 🥚 • 24H License",
-        Placeholder = "Paste your key here...",
-        QuickPaste = "Paste",
-        GetKey = "Get Key (24 Hours)",
-        CheckKey = "Activate",
-        Tutorial = "📖 How to get key",
-        MiniGame = "🎁 Mystery Box (50/50)",
-        MiniGameLocked = "🔒 Opened (Resets 00:00)",
-        Notice = "Each key is valid for 24 hours. Link completion takes about 1 minute.",
-        CopiedLink = "Key link copied to clipboard!",
-        CopiedTutorial = "Tutorial link copied to clipboard!",
-        Checking = "Checking...",
-        CheckingMsg = "Checking your key...",
-        Success = "Key verified! Loading Chilli Hub V2...",
-        Error = "Invalid key or expired 24-hour key!"
+        CenterTitle = "CHILLI HUB V5 × RONNEI",
+        CenterSub = "Steal An Egg 🥚 Edition",
+        Placeholder = "Paste your license key here...",
+        QuickPaste = "📋 Paste",
+        GetKey = "⚡ GET KEY (24 HOURS)",
+        CheckKey = "🌶️ ACTIVATE V5",
+        Tutorial = "📖 How to bypass link tutorial",
+        MiniGame = "🎁 Mystery Box Gacha (50/50)",
+        MiniGameLocked = "🔒 Opened Today (Resets 00:00)",
+        Notice = "📌 24-hour key link is fast and easy (takes only 1 min). Each key remains valid for exactly 24 hours.",
+        CopiedLink = "📋 24-hour key link copied to clipboard!",
+        CopiedTutorial = "📖 Tutorial link copied to clipboard!",
+        Checking = "AUTHENTICATING...",
+        CheckingMsg = "⏳ Verifying credentials with Chilli server...",
+        Success = "✔ License verified! Launching Chilli Hub V5...",
+        Error = "✖ Invalid key or expired 24-hour license!"
     }
 }
 local CurrentLang = "VI"
 
-local function PlayClickEffect(btn: TextButton)
+local function PlaySpringButton(btn: TextButton)
     local origSize = btn.Size
     local origPos = btn.Position
-    local sSize = UDim2.new(origSize.X.Scale, origSize.X.Offset - 4, origSize.Y.Scale, origSize.Y.Offset - 2)
-    local sPos = UDim2.new(origPos.X.Scale, origPos.X.Offset + 2, origPos.Y.Scale, origPos.Y.Offset + 1)
+    local shrinkSize = UDim2.new(origSize.X.Scale, origSize.X.Offset - 4, origSize.Y.Scale, origSize.Y.Offset - 3)
+    local shrinkPos = UDim2.new(origPos.X.Scale, origPos.X.Offset + 2, origPos.Y.Scale, origPos.Y.Offset + 1.5)
 
-    local t1 = TweenService:Create(btn, TweenInfo.new(0.07, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = sSize, Position = sPos })
-    local t2 = TweenService:Create(btn, TweenInfo.new(0.14, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = origSize, Position = origPos })
+    local t1 = TweenService:Create(btn, TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = shrinkSize, Position = shrinkPos })
+    local t2 = TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = origSize, Position = origPos })
     t1:Play()
     t1.Completed:Connect(function() t2:Play() end)
 end
 
 OpenKeySystemUI = function()
-    if CoreGui:FindFirstChild("ChilliV2_GetKeyUI") then CoreGui.ChilliV2_GetKeyUI:Destroy() end
+    if CoreGui:FindFirstChild("ChilliV5_GetKeyUI") then CoreGui.ChilliV5_GetKeyUI:Destroy() end
 
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "ChilliV2_GetKeyUI"
+    ScreenGui.Name = "ChilliV5_GetKeyUI"
     ScreenGui.ResetOnSpawn = false
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     pcall(function() ScreenGui.Parent = CoreGui end)
     if not ScreenGui.Parent then ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
-    -- Khung chính: Phong cách phẳng lì Dark Matte (#0E1015), gọn gàng và dễ nhìn
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    MainFrame.Size = UDim2.new(0, 420, 0, 355)
+    MainFrame.Size = UDim2.new(0, 440, 0, 465)
     MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(14, 16, 21)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(15, 6, 10)
     MainFrame.BorderSizePixel = 0
     MainFrame.ClipsDescendants = true
     MainFrame.ZIndex = 30
     MainFrame.Parent = ScreenGui
-    Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 16)
+    Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 22)
 
     local MainScale = Instance.new("UIScale", MainFrame)
-    MainScale.Scale = 0.85
+    MainScale.Scale = 0.5
 
     local MainStroke = Instance.new("UIStroke", MainFrame)
-    MainStroke.Thickness = 1.2
+    MainStroke.Thickness = 1.4
     MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    MainStroke.Color = Color3.fromRGB(38, 43, 56)
+    MainStroke.Color = Color3.fromRGB(225, 29, 72)
 
-    -- THANH TIÊU ĐỀ TRÊN CÙNG (HEADER)
+    local breatheTween = TweenService:Create(MainStroke, TweenInfo.new(2.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+        Color = Color3.fromRGB(140, 35, 55)
+    })
+    breatheTween:Play()
+
+    -- HEADER TOP BAR
     local HeaderBar = Instance.new("Frame")
-    HeaderBar.Size = UDim2.new(1, -32, 0, 46)
-    HeaderBar.Position = UDim2.new(0, 16, 0, 12)
+    HeaderBar.Size = UDim2.new(1, -24, 0, 42)
+    HeaderBar.Position = UDim2.new(0, 12, 0, 12)
     HeaderBar.BackgroundTransparency = 1
     HeaderBar.ZIndex = 31
     HeaderBar.Parent = MainFrame
 
-    local BrandIcon = Instance.new("Frame")
-    BrandIcon.Size = UDim2.new(0, 38, 0, 38)
-    BrandIcon.Position = UDim2.new(0, 0, 0.5, -19)
-    BrandIcon.BackgroundColor3 = Color3.fromRGB(24, 27, 36)
-    BrandIcon.ZIndex = 32
-    BrandIcon.Parent = HeaderBar
-    Instance.new("UICorner", BrandIcon).CornerRadius = UDim.new(0, 10)
-    local BrandStroke = Instance.new("UIStroke", BrandIcon)
-    BrandStroke.Color = Color3.fromRGB(225, 29, 72)
-    BrandStroke.Thickness = 1
+    local MiniLogo = Instance.new("Frame")
+    MiniLogo.Size = UDim2.new(0, 28, 0, 28)
+    MiniLogo.Position = UDim2.new(0, 0, 0.5, -14)
+    MiniLogo.BackgroundColor3 = Color3.fromRGB(26, 8, 14)
+    MiniLogo.ZIndex = 32
+    MiniLogo.Parent = HeaderBar
+    Instance.new("UICorner", MiniLogo).CornerRadius = UDim.new(1, 0)
+    local MiniLogoStroke = Instance.new("UIStroke", MiniLogo)
+    MiniLogoStroke.Color = Color3.fromRGB(225, 29, 72)
+    MiniLogoStroke.Thickness = 1.2
 
-    local BrandIconTxt = Instance.new("TextLabel")
-    BrandIconTxt.Size = UDim2.new(1, 0, 1, 0)
-    BrandIconTxt.BackgroundTransparency = 1
-    BrandIconTxt.Text = "🌶️"
-    BrandIconTxt.TextSize = 18
-    BrandIconTxt.ZIndex = 33
-    BrandIconTxt.Parent = BrandIcon
+    local MiniLogoTxt = Instance.new("TextLabel")
+    MiniLogoTxt.Size = UDim2.new(1, 0, 1, 0)
+    MiniLogoTxt.BackgroundTransparency = 1
+    MiniLogoTxt.Text = "🌶️"
+    MiniLogoTxt.TextSize = 13
+    MiniLogoTxt.ZIndex = 33
+    MiniLogoTxt.Parent = MiniLogo
 
     local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Size = UDim2.new(1, -115, 0, 20)
-    TitleLabel.Position = UDim2.new(0, 48, 0, 3)
+    TitleLabel.Size = UDim2.new(1, -100, 0, 18)
+    TitleLabel.Position = UDim2.new(0, 36, 0, 2)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = Languages[CurrentLang].Title
-    TitleLabel.TextColor3 = Color3.fromRGB(248, 250, 252)
-    TitleLabel.TextSize = 14
+    TitleLabel.TextColor3 = Color3.fromRGB(250, 235, 238)
+    TitleLabel.TextSize = 11
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.ZIndex = 32
     TitleLabel.Parent = HeaderBar
 
     local SubTitleLabel = Instance.new("TextLabel")
-    SubTitleLabel.Size = UDim2.new(1, -115, 0, 16)
-    SubTitleLabel.Position = UDim2.new(0, 48, 0, 23)
+    SubTitleLabel.Size = UDim2.new(1, -100, 0, 16)
+    SubTitleLabel.Position = UDim2.new(0, 36, 0, 20)
     SubTitleLabel.BackgroundTransparency = 1
     SubTitleLabel.Text = Languages[CurrentLang].Subtitle
-    SubTitleLabel.TextColor3 = Color3.fromRGB(148, 163, 184)
-    SubTitleLabel.TextSize = 10.5
+    SubTitleLabel.TextColor3 = Color3.fromRGB(225, 140, 160)
+    SubTitleLabel.TextSize = 9.5
     SubTitleLabel.Font = Enum.Font.GothamMedium
     SubTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     SubTitleLabel.ZIndex = 32
     SubTitleLabel.Parent = HeaderBar
 
     local OpenLangBtn = Instance.new("TextButton")
-    OpenLangBtn.Size = UDim2.new(0, 58, 0, 28)
-    OpenLangBtn.Position = UDim2.new(1, -58, 0.5, -14)
-    OpenLangBtn.BackgroundColor3 = Color3.fromRGB(22, 25, 34)
+    OpenLangBtn.Size = UDim2.new(0, 64, 0, 26)
+    OpenLangBtn.Position = UDim2.new(1, -64, 0.5, -13)
+    OpenLangBtn.BackgroundColor3 = Color3.fromRGB(26, 8, 14)
     OpenLangBtn.Text = Languages[CurrentLang].LangBtnText
-    OpenLangBtn.TextColor3 = Color3.fromRGB(226, 232, 240)
-    OpenLangBtn.TextSize = 11
+    OpenLangBtn.TextColor3 = Color3.fromRGB(245, 195, 210)
+    OpenLangBtn.TextSize = 10.5
     OpenLangBtn.Font = Enum.Font.GothamBold
     OpenLangBtn.AutoButtonColor = false
     OpenLangBtn.ZIndex = 32
     OpenLangBtn.Parent = HeaderBar
     Instance.new("UICorner", OpenLangBtn).CornerRadius = UDim.new(0, 8)
     local LangStroke = Instance.new("UIStroke", OpenLangBtn)
-    LangStroke.Color = Color3.fromRGB(45, 52, 68)
+    LangStroke.Color = Color3.fromRGB(160, 45, 65)
     LangStroke.Thickness = 1
 
-    -- ĐƯỜNG KẺ PHÂN CÁCH MẢNH
-    local Divider = Instance.new("Frame")
-    Divider.Size = UDim2.new(1, -32, 0, 1)
-    Divider.Position = UDim2.new(0, 16, 0, 66)
-    Divider.BackgroundColor3 = Color3.fromRGB(28, 32, 42)
-    Divider.BorderSizePixel = 0
-    Divider.ZIndex = 31
-    Divider.Parent = MainFrame
+    -- LOGO TRUNG TÂM
+    local CenterLogoBox = Instance.new("Frame")
+    CenterLogoBox.Size = UDim2.new(0, 50, 0, 50)
+    CenterLogoBox.Position = UDim2.new(0.5, -25, 0, 52)
+    CenterLogoBox.BackgroundColor3 = Color3.fromRGB(24, 7, 13)
+    CenterLogoBox.ZIndex = 31
+    CenterLogoBox.Parent = MainFrame
+    Instance.new("UICorner", CenterLogoBox).CornerRadius = UDim.new(0, 15)
+    local CenterLogoStroke = Instance.new("UIStroke", CenterLogoBox)
+    CenterLogoStroke.Color = Color3.fromRGB(225, 29, 72)
+    CenterLogoStroke.Thickness = 1.2
 
-    -- NHÃN GAME & THỜI HẠN KEY
-    local GameBadge = Instance.new("TextLabel")
-    GameBadge.Size = UDim2.new(1, -32, 0, 22)
-    GameBadge.Position = UDim2.new(0, 16, 0, 76)
-    GameBadge.BackgroundTransparency = 1
-    GameBadge.Text = Languages[CurrentLang].BadgeGame
-    GameBadge.TextColor3 = Color3.fromRGB(244, 63, 94)
-    GameBadge.TextSize = 11.5
-    GameBadge.Font = Enum.Font.GothamBold
-    GameBadge.TextXAlignment = Enum.TextXAlignment.Left
-    GameBadge.ZIndex = 31
-    GameBadge.Parent = MainFrame
+    local CenterLogoTxt = Instance.new("TextLabel")
+    CenterLogoTxt.Size = UDim2.new(1, 0, 1, 0)
+    CenterLogoTxt.BackgroundTransparency = 1
+    CenterLogoTxt.Text = "🥚"
+    CenterLogoTxt.TextSize = 24
+    CenterLogoTxt.ZIndex = 32
+    CenterLogoTxt.Parent = CenterLogoBox
 
-    -- Ô NHẬP KEY + NÚT DÁN NHANH TRỰC QUAN
+    local CenterTitle = Instance.new("TextLabel")
+    CenterTitle.Size = UDim2.new(1, -30, 0, 18)
+    CenterTitle.Position = UDim2.new(0, 15, 0, 106)
+    CenterTitle.BackgroundTransparency = 1
+    CenterTitle.Text = Languages[CurrentLang].CenterTitle
+    CenterTitle.TextColor3 = Color3.fromRGB(252, 240, 244)
+    CenterTitle.TextSize = 13
+    CenterTitle.Font = Enum.Font.GothamBold
+    CenterTitle.ZIndex = 31
+    CenterTitle.Parent = MainFrame
+
+    local CenterSub = Instance.new("TextLabel")
+    CenterSub.Size = UDim2.new(1, -30, 0, 15)
+    CenterSub.Position = UDim2.new(0, 15, 0, 125)
+    CenterSub.BackgroundTransparency = 1
+    CenterSub.Text = Languages[CurrentLang].CenterSub
+    CenterSub.TextColor3 = Color3.fromRGB(225, 140, 160)
+    CenterSub.TextSize = 9.5
+    CenterSub.Font = Enum.Font.GothamMedium
+    CenterSub.ZIndex = 31
+    CenterSub.Parent = MainFrame
+
+    -- KHUNG NHẬP LIỆU & NÚT DÁN NHANH
     local InputContainer = Instance.new("Frame")
-    InputContainer.Size = UDim2.new(1, -32, 0, 42)
-    InputContainer.Position = UDim2.new(0, 16, 0, 102)
-    InputContainer.BackgroundColor3 = Color3.fromRGB(20, 23, 31)
+    InputContainer.Size = UDim2.new(1, -36, 0, 36)
+    InputContainer.Position = UDim2.new(0, 18, 0, 144)
+    InputContainer.BackgroundColor3 = Color3.fromRGB(20, 6, 11)
     InputContainer.ZIndex = 31
     InputContainer.Parent = MainFrame
     Instance.new("UICorner", InputContainer).CornerRadius = UDim.new(0, 10)
     local InputStroke = Instance.new("UIStroke", InputContainer)
-    InputStroke.Color = Color3.fromRGB(42, 48, 62)
-    InputStroke.Thickness = 1
+    InputStroke.Color = Color3.fromRGB(60, 18, 28)
 
     local InputBox = Instance.new("TextBox")
-    InputBox.Size = UDim2.new(1, -78, 1, 0)
-    InputBox.Position = UDim2.new(0, 12, 0, 0)
+    InputBox.Size = UDim2.new(1, -75, 1, 0)
+    InputBox.Position = UDim2.new(0, 10, 0, 0)
     InputBox.BackgroundTransparency = 1
-    InputBox.TextColor3 = Color3.fromRGB(248, 250, 252)
-    InputBox.PlaceholderColor3 = Color3.fromRGB(100, 116, 139)
+    InputBox.TextColor3 = Color3.fromRGB(250, 235, 240)
+    InputBox.PlaceholderColor3 = Color3.fromRGB(130, 70, 85)
     InputBox.PlaceholderText = Languages[CurrentLang].Placeholder
     InputBox.Text = ""
-    InputBox.TextSize = 12
+    InputBox.TextSize = 11
     InputBox.Font = Enum.Font.GothamMedium
     InputBox.TextXAlignment = Enum.TextXAlignment.Left
     InputBox.ClearTextOnFocus = false
@@ -589,235 +614,227 @@ OpenKeySystemUI = function()
     InputBox.Parent = InputContainer
 
     local QuickPasteBtn = Instance.new("TextButton")
-    QuickPasteBtn.Size = UDim2.new(0, 56, 0, 28)
-    QuickPasteBtn.Position = UDim2.new(1, -63, 0.5, -14)
-    QuickPasteBtn.BackgroundColor3 = Color3.fromRGB(32, 37, 49)
+    QuickPasteBtn.Size = UDim2.new(0, 56, 0, 24)
+    QuickPasteBtn.Position = UDim2.new(1, -62, 0.5, -12)
+    QuickPasteBtn.BackgroundColor3 = Color3.fromRGB(32, 9, 16)
     QuickPasteBtn.Text = Languages[CurrentLang].QuickPaste
-    QuickPasteBtn.TextColor3 = Color3.fromRGB(226, 232, 240)
-    QuickPasteBtn.TextSize = 11
+    QuickPasteBtn.TextColor3 = Color3.fromRGB(245, 195, 210)
+    QuickPasteBtn.TextSize = 10
     QuickPasteBtn.Font = Enum.Font.GothamBold
     QuickPasteBtn.AutoButtonColor = false
     QuickPasteBtn.ZIndex = 33
     QuickPasteBtn.Parent = InputContainer
     Instance.new("UICorner", QuickPasteBtn).CornerRadius = UDim.new(0, 7)
+    local QuickPasteStroke = Instance.new("UIStroke", QuickPasteBtn)
+    QuickPasteStroke.Color = Color3.fromRGB(150, 40, 60)
     -- =========================================================================
---   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/5)
---   2 HÀNG NÚT ĐỐI XỨNG DỄ DÙNG · HỘP QUÀ 138733048851803 CẮT VIỀN TRẮNG
+--   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/5)
+--   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (80% GETKEY - 20% NOKEY, HIỂN THỊ 50/50)
 -- =========================================================================
 
-    -- HÀNG 1: LẤY KEY (24H) & KÍCH HOẠT
-    local PrimaryRow = Instance.new("Frame")
-    PrimaryRow.Size = UDim2.new(1, -32, 0, 40)
-    PrimaryRow.Position = UDim2.new(0, 16, 0, 154)
-    PrimaryRow.BackgroundTransparency = 1
-    PrimaryRow.ZIndex = 31
-    PrimaryRow.Parent = MainFrame
+    local ButtonsRow = Instance.new("Frame")
+    ButtonsRow.Size = UDim2.new(1, -36, 0, 38)
+    ButtonsRow.Position = UDim2.new(0, 18, 0, 186)
+    ButtonsRow.BackgroundTransparency = 1
+    ButtonsRow.ZIndex = 31
+    ButtonsRow.Parent = MainFrame
 
     local GetKeyBtn = Instance.new("TextButton")
-    GetKeyBtn.Size = UDim2.new(0.5, -5, 1, 0)
+    GetKeyBtn.Size = UDim2.new(0.5, -6, 1, 0)
     GetKeyBtn.Position = UDim2.new(0, 0, 0, 0)
     GetKeyBtn.BackgroundColor3 = Color3.fromRGB(225, 29, 72)
     GetKeyBtn.Text = Languages[CurrentLang].GetKey
     GetKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    GetKeyBtn.TextSize = 12
+    GetKeyBtn.TextSize = 11
     GetKeyBtn.Font = Enum.Font.GothamBold
     GetKeyBtn.AutoButtonColor = false
     GetKeyBtn.ZIndex = 32
-    GetKeyBtn.Parent = PrimaryRow
+    GetKeyBtn.Parent = ButtonsRow
     Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 10)
+    local GetKeyStroke = Instance.new("UIStroke", GetKeyBtn)
+    GetKeyStroke.Color = Color3.fromRGB(244, 63, 94)
 
     local CheckKeyBtn = Instance.new("TextButton")
-    CheckKeyBtn.Size = UDim2.new(0.5, -5, 1, 0)
-    CheckKeyBtn.Position = UDim2.new(0.5, 5, 0, 0)
-    CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(24, 28, 38)
+    CheckKeyBtn.Size = UDim2.new(0.5, -6, 1, 0)
+    CheckKeyBtn.Position = UDim2.new(0.5, 6, 0, 0)
+    CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(24, 7, 13)
     CheckKeyBtn.Text = Languages[CurrentLang].CheckKey
-    CheckKeyBtn.TextColor3 = Color3.fromRGB(248, 250, 252)
-    CheckKeyBtn.TextSize = 12
+    CheckKeyBtn.TextColor3 = Color3.fromRGB(245, 195, 210)
+    CheckKeyBtn.TextSize = 11
     CheckKeyBtn.Font = Enum.Font.GothamBold
     CheckKeyBtn.AutoButtonColor = false
     CheckKeyBtn.ZIndex = 32
-    CheckKeyBtn.Parent = PrimaryRow
+    CheckKeyBtn.Parent = ButtonsRow
     Instance.new("UICorner", CheckKeyBtn).CornerRadius = UDim.new(0, 10)
     local CheckStroke = Instance.new("UIStroke", CheckKeyBtn)
-    CheckStroke.Color = Color3.fromRGB(55, 65, 81)
-    CheckStroke.Thickness = 1
-
-    -- HÀNG 2: HƯỚNG DẪN VƯỢT LINK & MINI GAME HỘP QUÀ (ĐẶT CẠNH NHAU GỌN ĐẸP)
-    local SecondaryRow = Instance.new("Frame")
-    SecondaryRow.Size = UDim2.new(1, -32, 0, 38)
-    SecondaryRow.Position = UDim2.new(0, 16, 0, 202)
-    SecondaryRow.BackgroundTransparency = 1
-    SecondaryRow.ZIndex = 31
-    SecondaryRow.Parent = MainFrame
+    CheckStroke.Color = Color3.fromRGB(160, 45, 65)
+    CheckStroke.Thickness = 1.2
 
     local TutorialBtn = Instance.new("TextButton")
-    TutorialBtn.Size = UDim2.new(0.5, -5, 1, 0)
-    TutorialBtn.Position = UDim2.new(0, 0, 0, 0)
-    TutorialBtn.BackgroundColor3 = Color3.fromRGB(20, 23, 31)
+    TutorialBtn.Size = UDim2.new(1, -36, 0, 32)
+    TutorialBtn.Position = UDim2.new(0, 18, 0, 230)
+    TutorialBtn.BackgroundColor3 = Color3.fromRGB(22, 6, 12)
     TutorialBtn.Text = Languages[CurrentLang].Tutorial
-    TutorialBtn.TextColor3 = Color3.fromRGB(148, 163, 184)
-    TutorialBtn.TextSize = 11
+    TutorialBtn.TextColor3 = Color3.fromRGB(250, 175, 195)
+    TutorialBtn.TextSize = 10.5
     TutorialBtn.Font = Enum.Font.GothamBold
     TutorialBtn.AutoButtonColor = false
     TutorialBtn.ZIndex = 32
-    TutorialBtn.Parent = SecondaryRow
+    TutorialBtn.Parent = MainFrame
     Instance.new("UICorner", TutorialBtn).CornerRadius = UDim.new(0, 10)
     local TutorialStroke = Instance.new("UIStroke", TutorialBtn)
-    TutorialStroke.Color = Color3.fromRGB(38, 43, 56)
-    TutorialStroke.Thickness = 1
+    TutorialStroke.Color = Color3.fromRGB(130, 35, 55)
+    TutorialStroke.Thickness = 1.2
 
-    local MiniGameBtn = Instance.new("TextButton")
-    MiniGameBtn.Size = UDim2.new(0.5, -5, 1, 0)
-    MiniGameBtn.Position = UDim2.new(0.5, 5, 0, 0)
-    MiniGameBtn.BackgroundColor3 = CanPlayGachaToday() and Color3.fromRGB(32, 16, 28) or Color3.fromRGB(20, 23, 31)
-    MiniGameBtn.Text = CanPlayGachaToday() and Languages[CurrentLang].MiniGame or Languages[CurrentLang].MiniGameLocked
-    MiniGameBtn.TextColor3 = CanPlayGachaToday() and Color3.fromRGB(251, 113, 133) or Color3.fromRGB(100, 116, 139)
-    MiniGameBtn.TextSize = 11
-    MiniGameBtn.Font = Enum.Font.GothamBold
-    MiniGameBtn.AutoButtonColor = false
-    MiniGameBtn.ZIndex = 32
-    MiniGameBtn.Parent = SecondaryRow
-    Instance.new("UICorner", MiniGameBtn).CornerRadius = UDim.new(0, 10)
-    local MiniGameStroke = Instance.new("UIStroke", MiniGameBtn)
-    MiniGameStroke.Color = CanPlayGachaToday() and Color3.fromRGB(225, 29, 72) or Color3.fromRGB(38, 43, 56)
-    MiniGameStroke.Thickness = 1
-
-    -- KHUNG GHI CHÚ NGẮN GỌN
     local NoticeCard = Instance.new("Frame")
-    NoticeCard.Size = UDim2.new(1, -32, 0, 48)
-    NoticeCard.Position = UDim2.new(0, 16, 0, 250)
-    NoticeCard.BackgroundColor3 = Color3.fromRGB(18, 21, 28)
+    NoticeCard.Size = UDim2.new(1, -36, 0, 56)
+    NoticeCard.Position = UDim2.new(0, 18, 0, 268)
+    NoticeCard.BackgroundColor3 = Color3.fromRGB(18, 5, 10)
     NoticeCard.ZIndex = 31
     NoticeCard.Parent = MainFrame
     Instance.new("UICorner", NoticeCard).CornerRadius = UDim.new(0, 10)
     local NoticeStroke = Instance.new("UIStroke", NoticeCard)
-    NoticeStroke.Color = Color3.fromRGB(32, 37, 49)
-    NoticeStroke.Thickness = 1
+    NoticeStroke.Color = Color3.fromRGB(45, 12, 20)
 
     local NoticeText = Instance.new("TextLabel")
-    NoticeText.Size = UDim2.new(1, -20, 1, -8)
-    NoticeText.Position = UDim2.new(0, 10, 0, 4)
+    NoticeText.Size = UDim2.new(1, -16, 1, -8)
+    NoticeText.Position = UDim2.new(0, 8, 0, 4)
     NoticeText.BackgroundTransparency = 1
     NoticeText.Text = Languages[CurrentLang].Notice
-    NoticeText.TextColor3 = Color3.fromRGB(148, 163, 184)
-    NoticeText.TextSize = 10.5
+    NoticeText.TextColor3 = Color3.fromRGB(240, 210, 218)
+    NoticeText.TextSize = 10
     NoticeText.Font = Enum.Font.GothamMedium
     NoticeText.TextWrapped = true
+    NoticeText.TextYAlignment = Enum.TextYAlignment.Center
     NoticeText.TextXAlignment = Enum.TextXAlignment.Left
     NoticeText.ZIndex = 32
     NoticeText.Parent = NoticeCard
 
-    -- DÒNG TRẠNG THÁI DƯỚI CÙNG
+    local MiniGameBtn = Instance.new("TextButton")
+    MiniGameBtn.Size = UDim2.new(1, -36, 0, 38)
+    MiniGameBtn.Position = UDim2.new(0, 18, 0, 332)
+    MiniGameBtn.BackgroundColor3 = Color3.fromRGB(34, 9, 16)
+    MiniGameBtn.Text = CanPlayGachaToday() and Languages[CurrentLang].MiniGame or Languages[CurrentLang].MiniGameLocked
+    MiniGameBtn.TextColor3 = CanPlayGachaToday() and Color3.fromRGB(255, 215, 225) or Color3.fromRGB(140, 80, 95)
+    MiniGameBtn.TextSize = 11
+    MiniGameBtn.Font = Enum.Font.GothamBold
+    MiniGameBtn.AutoButtonColor = false
+    MiniGameBtn.ZIndex = 32
+    MiniGameBtn.Parent = MainFrame
+    Instance.new("UICorner", MiniGameBtn).CornerRadius = UDim.new(0, 10)
+    local MiniGameStroke = Instance.new("UIStroke", MiniGameBtn)
+    MiniGameStroke.Color = CanPlayGachaToday() and Color3.fromRGB(225, 29, 72) or Color3.fromRGB(60, 20, 30)
+    MiniGameStroke.Thickness = 1.3
+
     local StatusMsg = Instance.new("TextLabel")
-    StatusMsg.Size = UDim2.new(1, -32, 0, 20)
-    StatusMsg.Position = UDim2.new(0, 16, 0, 312)
+    StatusMsg.Size = UDim2.new(1, -36, 0, 20)
+    StatusMsg.Position = UDim2.new(0, 18, 0, 376)
     StatusMsg.BackgroundTransparency = 1
-    StatusMsg.Text = "Sẵn sàng kết nối • Chilli Hub V2"
-    StatusMsg.TextColor3 = Color3.fromRGB(100, 116, 139)
-    StatusMsg.TextSize = 10.5
+    StatusMsg.Text = "Chilli Hub V5 • Steal An Egg 🥚 • by ronnei7.htk"
+    StatusMsg.TextColor3 = Color3.fromRGB(140, 75, 90)
+    StatusMsg.TextSize = 9.5
     StatusMsg.Font = Enum.Font.GothamMedium
     StatusMsg.ZIndex = 31
     StatusMsg.Parent = MainFrame
 
-    -- =========================================================================
-    --   MODAL HỘP QUÀ MAY MẮN: CĂN CHỈNH LẤY ĐÚNG THÂN HỘP QUÀ (CẮT VIỀN TRẮNG)
-    -- =========================================================================
+    -- MODAL HỘP QUÀ GACHA
     local GachaModal = Instance.new("Frame")
     GachaModal.Name = "GachaModal"
     GachaModal.Size = UDim2.new(1, 0, 1, 0)
     GachaModal.Position = UDim2.new(0, 0, 1, 0)
-    GachaModal.BackgroundColor3 = Color3.fromRGB(14, 16, 21)
+    GachaModal.BackgroundColor3 = Color3.fromRGB(13, 4, 8)
+    GachaModal.BackgroundTransparency = 0.02
     GachaModal.ZIndex = 45
     GachaModal.ClipsDescendants = true
     GachaModal.Parent = MainFrame
-    Instance.new("UICorner", GachaModal).CornerRadius = UDim.new(0, 16)
+    Instance.new("UICorner", GachaModal).CornerRadius = UDim.new(0, 20)
 
     local GachaHeader = Instance.new("TextLabel")
     GachaHeader.Size = UDim2.new(1, -60, 0, 24)
-    GachaHeader.Position = UDim2.new(0, 18, 0, 14)
+    GachaHeader.Position = UDim2.new(0, 20, 0, 14)
     GachaHeader.BackgroundTransparency = 1
-    GachaHeader.Text = "🎁 HỘP QUÀ MAY MẮN MỖI NGÀY"
-    GachaHeader.TextColor3 = Color3.fromRGB(248, 250, 252)
-    GachaHeader.TextSize = 13
+    GachaHeader.Text = "🎁 HỘP QUÀ MAY MẮN (1 LẦN/NGÀY)"
+    GachaHeader.TextColor3 = Color3.fromRGB(255, 185, 200)
+    GachaHeader.TextSize = 12
     GachaHeader.Font = Enum.Font.GothamBold
     GachaHeader.TextXAlignment = Enum.TextXAlignment.Left
     GachaHeader.ZIndex = 46
     GachaHeader.Parent = GachaModal
 
     local GachaCloseBtn = Instance.new("TextButton")
-    GachaCloseBtn.Size = UDim2.new(0, 28, 0, 28)
-    GachaCloseBtn.Position = UDim2.new(1, -42, 0, 12)
-    GachaCloseBtn.BackgroundColor3 = Color3.fromRGB(24, 28, 38)
+    GachaCloseBtn.Size = UDim2.new(0, 26, 0, 26)
+    GachaCloseBtn.Position = UDim2.new(1, -36, 0, 13)
+    GachaCloseBtn.BackgroundColor3 = Color3.fromRGB(26, 7, 13)
     GachaCloseBtn.Text = "✕"
-    GachaCloseBtn.TextColor3 = Color3.fromRGB(148, 163, 184)
-    GachaCloseBtn.TextSize = 12
+    GachaCloseBtn.TextColor3 = Color3.fromRGB(225, 29, 72)
+    GachaCloseBtn.TextSize = 11
     GachaCloseBtn.Font = Enum.Font.GothamBold
     GachaCloseBtn.ZIndex = 46
     GachaCloseBtn.Parent = GachaModal
-    Instance.new("UICorner", GachaCloseBtn).CornerRadius = UDim.new(0, 8)
+    Instance.new("UICorner", GachaCloseBtn).CornerRadius = UDim.new(0, 6)
 
     local GachaSubText = Instance.new("TextLabel")
-    GachaSubText.Size = UDim2.new(1, -36, 0, 20)
-    GachaSubText.Position = UDim2.new(0, 18, 0, 40)
+    GachaSubText.Size = UDim2.new(1, -40, 0, 24)
+    GachaSubText.Position = UDim2.new(0, 20, 0, 40)
     GachaSubText.BackgroundTransparency = 1
-    GachaSubText.Text = "Chọn 1 hộp bất kỳ. Trúng NoKey sẽ mở thẳng script không cần vượt link!"
-    GachaSubText.TextColor3 = Color3.fromRGB(148, 163, 184)
-    GachaSubText.TextSize = 10.5
+    GachaSubText.Text = "Chọn 1 trong 2 hộp quà. Trúng NoKey sẽ vào thẳng script không cần GetKey!"
+    GachaSubText.TextColor3 = Color3.fromRGB(230, 140, 160)
+    GachaSubText.TextSize = 10
     GachaSubText.Font = Enum.Font.GothamMedium
+    GachaSubText.TextWrapped = true
     GachaSubText.TextXAlignment = Enum.TextXAlignment.Left
     GachaSubText.ZIndex = 46
     GachaSubText.Parent = GachaModal
 
     local BoxesContainer = Instance.new("Frame")
-    BoxesContainer.Size = UDim2.new(1, -36, 0, 215)
-    BoxesContainer.Position = UDim2.new(0, 18, 0, 68)
+    BoxesContainer.Size = UDim2.new(1, -36, 0, 225)
+    BoxesContainer.Position = UDim2.new(0, 18, 0, 72)
     BoxesContainer.BackgroundTransparency = 1
     BoxesContainer.ZIndex = 46
     BoxesContainer.Parent = GachaModal
 
-    -- HÀM TẠO THẺ HỘP QUÀ: DÙNG MASK CẮT BỎ HOÀN TOÀN VIỀN TRẮNG CỦA STICKER
     local function CreateMysteryBox(name: string, posXScale: number, posXOffset: number, boxTitle: string)
         local BoxCard = Instance.new("TextButton")
         BoxCard.Name = name
         BoxCard.Size = UDim2.new(0.5, -6, 1, 0)
         BoxCard.Position = UDim2.new(posXScale, posXOffset, 0, 0)
-        BoxCard.BackgroundColor3 = Color3.fromRGB(20, 23, 31)
+        BoxCard.BackgroundColor3 = Color3.fromRGB(20, 6, 12)
         BoxCard.Text = ""
         BoxCard.AutoButtonColor = false
         BoxCard.ZIndex = 47
         BoxCard.Parent = BoxesContainer
-        Instance.new("UICorner", BoxCard).CornerRadius = UDim.new(0, 14)
+        Instance.new("UICorner", BoxCard).CornerRadius = UDim.new(0, 16)
         local BoxStroke = Instance.new("UIStroke", BoxCard)
-        BoxStroke.Color = Color3.fromRGB(45, 52, 68)
-        BoxStroke.Thickness = 1.2
+        BoxStroke.Color = Color3.fromRGB(150, 40, 60)
+        BoxStroke.Thickness = 1.3
 
-        -- Nhãn hiển thị 50% - 50% rõ ràng
-        local RateTag = Instance.new("TextLabel")
-        RateTag.Size = UDim2.new(1, -20, 0, 20)
-        RateTag.Position = UDim2.new(0, 10, 0, 10)
-        RateTag.BackgroundColor3 = Color3.fromRGB(28, 33, 44)
-        RateTag.Text = "TỈ LỆ: 50% - 50%"
-        RateTag.TextColor3 = Color3.fromRGB(251, 113, 133)
-        RateTag.TextSize = 9.5
-        RateTag.Font = Enum.Font.GothamBold
-        RateTag.ZIndex = 48
-        RateTag.Parent = BoxCard
-        Instance.new("UICorner", RateTag).CornerRadius = UDim.new(0, 6)
+        local Tag5050 = Instance.new("TextLabel")
+        Tag5050.Size = UDim2.new(1, -16, 0, 18)
+        Tag5050.Position = UDim2.new(0, 8, 0, 8)
+        Tag5050.BackgroundColor3 = Color3.fromRGB(34, 9, 16)
+        Tag5050.Text = "TỈ LỆ: 50% - 50%"
+        Tag5050.TextColor3 = Color3.fromRGB(255, 200, 215)
+        Tag5050.TextSize = 9
+        Tag5050.Font = Enum.Font.GothamBold
+        Tag5050.ZIndex = 48
+        Tag5050.Parent = BoxCard
+        Instance.new("UICorner", Tag5050).CornerRadius = UDim.new(0, 6)
+        local TagStroke = Instance.new("UIStroke", Tag5050)
+        TagStroke.Color = Color3.fromRGB(210, 50, 80)
+        TagStroke.Thickness = 1
 
-        -- KHUNG MẶT NẠ CẮT (CROP MASK): CHỈ LẤY HÌNH HỘP QUÀ BÊN TRONG
         local CropMask = Instance.new("Frame")
         CropMask.Name = "CropMask"
         CropMask.AnchorPoint = Vector2.new(0.5, 0)
         CropMask.Size = UDim2.new(0, 96, 0, 96)
         CropMask.Position = UDim2.new(0.5, 0, 0, 38)
-        CropMask.BackgroundTransparency = 1 -- Trong suốt hoàn toàn, chỉ dùng để cắt rìa
+        CropMask.BackgroundTransparency = 1
         CropMask.BorderSizePixel = 0
         CropMask.ClipsDescendants = true
         CropMask.ZIndex = 48
         CropMask.Parent = BoxCard
         Instance.new("UICorner", CropMask).CornerRadius = UDim.new(0, 18)
 
-        -- Phóng đại 1.28x và cân chỉnh tâm để đẩy viền trắng & sao thừa ra khỏi vùng hiển thị
         local GiftImage = Instance.new("ImageLabel")
         GiftImage.Name = "GiftImage"
         GiftImage.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -832,23 +849,23 @@ OpenKeySystemUI = function()
         local Title = Instance.new("TextLabel")
         Title.Name = "BoxTitle"
         Title.Size = UDim2.new(1, 0, 0, 18)
-        Title.Position = UDim2.new(0, 0, 0, 142)
+        Title.Position = UDim2.new(0, 0, 0, 134)
         Title.BackgroundTransparency = 1
         Title.Text = boxTitle
-        Title.TextColor3 = Color3.fromRGB(248, 250, 252)
-        Title.TextSize = 12
+        Title.TextColor3 = Color3.fromRGB(250, 230, 235)
+        Title.TextSize = 11.5
         Title.Font = Enum.Font.GothamBold
         Title.ZIndex = 48
         Title.Parent = BoxCard
 
         local ActionHint = Instance.new("TextLabel")
         ActionHint.Name = "ActionHint"
-        ActionHint.Size = UDim2.new(1, -24, 0, 28)
-        ActionHint.Position = UDim2.new(0, 12, 0, 172)
+        ActionHint.Size = UDim2.new(1, -20, 0, 24)
+        ActionHint.Position = UDim2.new(0, 10, 0, 172)
         ActionHint.BackgroundColor3 = Color3.fromRGB(225, 29, 72)
-        ActionHint.Text = "MỞ HỘP NÀY"
+        ActionHint.Text = "MỞ HỘP"
         ActionHint.TextColor3 = Color3.fromRGB(255, 255, 255)
-        ActionHint.TextSize = 10.5
+        ActionHint.TextSize = 10
         ActionHint.Font = Enum.Font.GothamBold
         ActionHint.ZIndex = 48
         ActionHint.Parent = BoxCard
@@ -863,23 +880,23 @@ OpenKeySystemUI = function()
     local GachaResultBanner = Instance.new("TextLabel")
     GachaResultBanner.Size = UDim2.new(1, -36, 0, 36)
     GachaResultBanner.Position = UDim2.new(0, 18, 0, 296)
-    GachaResultBanner.BackgroundColor3 = Color3.fromRGB(20, 23, 31)
+    GachaResultBanner.BackgroundColor3 = Color3.fromRGB(20, 6, 12)
     GachaResultBanner.Text = "Bấm vào 1 trong 2 hộp quà phía trên để thử vận may!"
-    GachaResultBanner.TextColor3 = Color3.fromRGB(226, 232, 240)
-    GachaResultBanner.TextSize = 11
+    GachaResultBanner.TextColor3 = Color3.fromRGB(245, 175, 195)
+    GachaResultBanner.TextSize = 10
     GachaResultBanner.Font = Enum.Font.GothamMedium
     GachaResultBanner.ZIndex = 46
     GachaResultBanner.Parent = GachaModal
     Instance.new("UICorner", GachaResultBanner).CornerRadius = UDim.new(0, 10)
     -- =========================================================================
---   🌶️ CHILLI HUB V2 X RONNEI - STEAL AN EGG 🥚 (PHẦN 5/5)
---   XỬ LÝ MỞ HỘP 70/30 · CHUYỂN NGÔN NGỮ · LUỒNG DÙNG THỬ 2 PHÚT
+--   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 5/5)
+--   BACKEND TỈ LỆ 80% GETKEY - 20% NOKEY · ĐỔI NGÔN NGỮ · LUỒNG DÙNG THỬ
 -- =========================================================================
 
     local isRollingMutex = false
 
     local function OpenGachaModal()
-        TweenService:Create(GachaModal, TweenInfo.new(0.26, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+        TweenService:Create(GachaModal, TweenInfo.new(0.28, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
             Position = UDim2.new(0, 0, 0, 0)
         }):Play()
     end
@@ -892,45 +909,42 @@ OpenKeySystemUI = function()
 
     GachaCloseBtn.MouseButton1Click:Connect(function()
         if isRollingMutex then return end
-        PlayClickEffect(GachaCloseBtn)
+        PlaySpringButton(GachaCloseBtn)
         CloseGachaModal()
     end)
 
     MiniGameBtn.MouseButton1Click:Connect(function()
-        PlayClickEffect(MiniGameBtn)
+        PlaySpringButton(MiniGameBtn)
         if not CanPlayGachaToday() then
             local secsLeft = GetSecondsUntilMidnightGMT7()
-            local h = math.floor(secsLeft / 3600)
-            local m = math.floor((secsLeft % 3600) / 60)
-            StatusMsg.Text = string.format("⏳ Đã mở hôm nay! Reset sau %02d giờ %02d phút (00:00)", h, m)
-            StatusMsg.TextColor3 = Color3.fromRGB(244, 63, 94)
+            local hoursLeft = math.floor(secsLeft / 3600)
+            local minsLeft = math.floor((secsLeft % 3600) / 60)
+            StatusMsg.Text = string.format("⏳ Đã mở hôm nay! Reset sau %02d:%02d (00:00 GMT+7)", hoursLeft, minsLeft)
+            StatusMsg.TextColor3 = Color3.fromRGB(239, 68, 68)
             return
         end
         OpenGachaModal()
     end)
 
-    -- HÀM MỞ HỘP QUÀ: HIỂN THỊ 50/50 NHƯNG TỈ LỆ THỰC 30% NOKEY - 70% GETKEY
+    -- HÀM MỞ HỘP QUÀ: TỈ LỆ THỰC TẾ 80% GETKEY (> 20) VÀ 20% NOKEY (<= 20)
     local function ExecuteBoxRoll(chosenBox: TextButton, otherBox: TextButton, chosenStroke: UIStroke, chosenMask: Frame, chosenTitle: TextLabel, chosenHint: TextLabel)
         if isRollingMutex then return end
         isRollingMutex = true
 
-        -- Lưu trạng thái đã mở ngay lập tức chống thoát game mở lại
         SaveGachaPlayed()
         MiniGameBtn.Text = Languages[CurrentLang].MiniGameLocked
-        MiniGameBtn.BackgroundColor3 = Color3.fromRGB(20, 23, 31)
-        MiniGameBtn.TextColor3 = Color3.fromRGB(100, 116, 139)
-        MiniGameStroke.Color = Color3.fromRGB(38, 43, 56)
+        MiniGameBtn.TextColor3 = Color3.fromRGB(140, 80, 95)
+        MiniGameStroke.Color = Color3.fromRGB(60, 20, 30)
 
-        TweenService:Create(otherBox, TweenInfo.new(0.25, Enum.EasingStyle.Quad), { BackgroundTransparency = 0.65 }):Play()
+        TweenService:Create(otherBox, TweenInfo.new(0.3, Enum.EasingStyle.Quad), { BackgroundTransparency = 0.65 }):Play()
         otherBox.Active = false
 
         chosenStroke.Color = Color3.fromRGB(245, 158, 11)
         chosenHint.Text = "ĐANG MỞ..."
         chosenHint.BackgroundColor3 = Color3.fromRGB(217, 119, 6)
-        GachaResultBanner.Text = "⏳ Đang mở hộp quà của bạn..."
+        GachaResultBanner.Text = "⏳ Đang hồi hộp bóc seal hộp quà..."
         GachaResultBanner.TextColor3 = Color3.fromRGB(253, 224, 71)
 
-        -- Hiệu ứng lắc hộp quà mượt mà
         for i = 1, 8 do
             local angle = (i % 2 == 0) and 6 or -6
             TweenService:Create(chosenMask, TweenInfo.new(0.06, Enum.EasingStyle.Quad), { Rotation = angle }):Play()
@@ -939,9 +953,9 @@ OpenKeySystemUI = function()
         TweenService:Create(chosenMask, TweenInfo.new(0.08, Enum.EasingStyle.Back), { Rotation = 0 }):Play()
         task.wait(0.25)
 
-        -- TỈ LỆ THỰC TẾ: 30% NOKEY (<= 30) | 70% GETKEY (> 30)
+        -- CẬP NHẬT TỈ LỆ MỚI: 20% NOKEY (<= 20) VÀ 80% GETKEY (> 20)
         local roll = math.random(1, 100)
-        local isNoKeyWon = (roll <= 30)
+        local isNoKeyWon = (roll <= 20)
 
         if isNoKeyWon then
             chosenStroke.Color = Color3.fromRGB(34, 197, 94)
@@ -950,7 +964,7 @@ OpenKeySystemUI = function()
             chosenHint.Text = "VÀO SCRIPT NGAY"
             chosenHint.BackgroundColor3 = Color3.fromRGB(22, 163, 74)
 
-            GachaResultBanner.Text = "🎉 Chúc mừng! Bạn mở trúng NoKey! Đang tải script..."
+            GachaResultBanner.Text = "🎉 Chúc mừng! Bạn trúng NoKey! Đang tải script..."
             GachaResultBanner.TextColor3 = Color3.fromRGB(74, 222, 128)
 
             Save24hKey(GetSecondsUntilMidnightGMT7())
@@ -959,8 +973,8 @@ OpenKeySystemUI = function()
             RemoveScreenLockdown()
             LaunchTargetScriptWithWatcher()
 
-            TweenService:Create(MainScale, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Scale = 0.6 }):Play()
-            task.wait(0.22)
+            TweenService:Create(MainScale, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Scale = 0.5 }):Play()
+            task.wait(0.25)
             ScreenGui:Destroy()
         else
             chosenStroke.Color = Color3.fromRGB(225, 29, 72)
@@ -969,14 +983,14 @@ OpenKeySystemUI = function()
             chosenHint.Text = "QUAY VỀ LẤY KEY"
             chosenHint.BackgroundColor3 = Color3.fromRGB(159, 18, 57)
 
-            GachaResultBanner.Text = "Hộp này là GetKey! Đang đưa bạn về màn hình lấy key..."
+            GachaResultBanner.Text = "😢 Hộp này là GetKey! Vui lòng vượt link để lấy key nhé."
             GachaResultBanner.TextColor3 = Color3.fromRGB(251, 113, 133)
 
-            task.wait(1.5)
+            task.wait(1.6)
             CloseGachaModal()
             isRollingMutex = false
 
-            StatusMsg.Text = "📌 Mở trúng GetKey! Bấm 'Lấy Key (24 Giờ)' để nhận mã."
+            StatusMsg.Text = "📌 Mở trúng GetKey! Bấm 'Lấy Key (24 Tiếng)' để tiếp tục."
             StatusMsg.TextColor3 = Color3.fromRGB(251, 113, 133)
         end
     end
@@ -990,7 +1004,7 @@ OpenKeySystemUI = function()
     end)
 
     QuickPasteBtn.MouseButton1Click:Connect(function()
-        PlayClickEffect(QuickPasteBtn)
+        PlaySpringButton(QuickPasteBtn)
         local pasted = false
         pcall(function()
             if getclipboard then
@@ -1010,41 +1024,45 @@ OpenKeySystemUI = function()
     TutorialBtn.MouseButton1Click:Connect(function()
         if isTutorialDebounce then return end
         isTutorialDebounce = true
-        PlayClickEffect(TutorialBtn)
+        PlaySpringButton(TutorialBtn)
 
         if setclipboard then setclipboard(TutorialUrl) elseif toclipboard then toclipboard(TutorialUrl) end
 
-        TutorialBtn.Text = "✔ Đã chép link HD"
-        TutorialBtn.TextColor3 = Color3.fromRGB(52, 211, 153)
+        TutorialBtn.Text = "📖 ĐÃ SAO CHÉP LINK HƯỚNG DẪN!"
+        TutorialBtn.BackgroundColor3 = Color3.fromRGB(16, 185, 129)
+        TutorialStroke.Color = Color3.fromRGB(52, 211, 153)
         StatusMsg.Text = Languages[CurrentLang].CopiedTutorial
         StatusMsg.TextColor3 = Color3.fromRGB(52, 211, 153)
 
-        task.delay(2.2, function()
+        task.delay(2.5, function()
             if TutorialBtn and TutorialBtn.Parent then
                 TutorialBtn.Text = Languages[CurrentLang].Tutorial
-                TutorialBtn.TextColor3 = Color3.fromRGB(148, 163, 184)
-                StatusMsg.Text = "Sẵn sàng kết nối • Chilli Hub V2"
-                StatusMsg.TextColor3 = Color3.fromRGB(100, 116, 139)
+                TutorialBtn.BackgroundColor3 = Color3.fromRGB(22, 6, 12)
+                TutorialStroke.Color = Color3.fromRGB(130, 35, 55)
+                StatusMsg.Text = "Chilli Hub V5 • Steal An Egg 🥚 • by ronnei7.htk"
+                StatusMsg.TextColor3 = Color3.fromRGB(140, 75, 90)
             end
             isTutorialDebounce = false
         end)
     end)
 
     GetKeyBtn.MouseButton1Click:Connect(function()
-        PlayClickEffect(GetKeyBtn)
+        PlaySpringButton(GetKeyBtn)
         if setclipboard then setclipboard(KeyUrl) elseif toclipboard then toclipboard(KeyUrl) end
 
-        GetKeyBtn.Text = "✔ Đã Sao Chép Link!"
+        GetKeyBtn.Text = "COPIED LINK (24H)!"
         GetKeyBtn.BackgroundColor3 = Color3.fromRGB(16, 185, 129)
+        GetKeyStroke.Color = Color3.fromRGB(52, 211, 153)
         StatusMsg.Text = Languages[CurrentLang].CopiedLink
         StatusMsg.TextColor3 = Color3.fromRGB(52, 211, 153)
 
-        task.delay(2.2, function()
+        task.delay(2.5, function()
             if GetKeyBtn and GetKeyBtn.Parent then
                 GetKeyBtn.Text = Languages[CurrentLang].GetKey
                 GetKeyBtn.BackgroundColor3 = Color3.fromRGB(225, 29, 72)
-                StatusMsg.Text = "Sẵn sàng kết nối • Chilli Hub V2"
-                StatusMsg.TextColor3 = Color3.fromRGB(100, 116, 139)
+                GetKeyStroke.Color = Color3.fromRGB(244, 63, 94)
+                StatusMsg.Text = "Chilli Hub V5 • Steal An Egg 🥚 • by ronnei7.htk"
+                StatusMsg.TextColor3 = Color3.fromRGB(140, 75, 90)
             end
         end)
     end)
@@ -1053,58 +1071,64 @@ OpenKeySystemUI = function()
     CheckKeyBtn.MouseButton1Click:Connect(function()
         if isChecking then return end
         isChecking = true
-        PlayClickEffect(CheckKeyBtn)
+        PlaySpringButton(CheckKeyBtn)
 
         CheckKeyBtn.Text = Languages[CurrentLang].Checking
         StatusMsg.Text = Languages[CurrentLang].CheckingMsg
-        StatusMsg.TextColor3 = Color3.fromRGB(226, 232, 240)
+        StatusMsg.TextColor3 = Color3.fromRGB(245, 195, 210)
 
-        task.wait(0.3)
-        local isKeyValid = VerifyChilliV2Key(InputBox.Text)
+        task.wait(0.35)
+        local isKeyValid = VerifyChilliV5Key(InputBox.Text)
 
         if isKeyValid then
             Save24hKey()
-            CheckKeyBtn.Text = "✔ Thành Công"
-            CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(22, 163, 74)
+            CheckKeyBtn.Text = "SUCCESS"
+            CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(22, 101, 52)
+            CheckStroke.Color = Color3.fromRGB(74, 222, 128)
             StatusMsg.Text = Languages[CurrentLang].Success
             StatusMsg.TextColor3 = Color3.fromRGB(74, 222, 128)
 
             RemoveScreenLockdown()
             LaunchTargetScriptWithWatcher()
 
-            task.wait(0.35)
-            TweenService:Create(MainScale, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Scale = 0.6 }):Play()
-            task.wait(0.2)
+            task.wait(0.4)
+            TweenService:Create(MainScale, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Scale = 0.5 }):Play()
+            task.wait(0.25)
             ScreenGui:Destroy()
         else
             isChecking = false
             CheckKeyBtn.Text = Languages[CurrentLang].CheckKey
             StatusMsg.Text = Languages[CurrentLang].Error
-            StatusMsg.TextColor3 = Color3.fromRGB(244, 63, 94)
+            StatusMsg.TextColor3 = Color3.fromRGB(239, 68, 68)
 
             InputStroke.Color = Color3.fromRGB(225, 29, 72)
             local origOffset = MainFrame.Position.X.Offset
-            for _, off in ipairs({ -5, 5, -3, 3, 0 }) do
-                TweenService:Create(MainFrame, TweenInfo.new(0.04, Enum.EasingStyle.Quad), {
-                    Position = UDim2.new(0.5, off, 0.5, 0)
-                }):Play()
-                task.wait(0.045)
-            end
-            MainFrame.Position = UDim2.new(0.5, origOffset, 0.5, 0)
-            task.wait(0.5)
-            InputStroke.Color = Color3.fromRGB(42, 48, 62)
+            local offsets = { -8, 8, -6, 6, -3, 3, 0 }
+            task.spawn(function()
+                for _, off in ipairs(offsets) do
+                    local t = TweenService:Create(MainFrame, TweenInfo.new(0.04, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Position = UDim2.new(0.5, off, 0.5, 0)
+                    })
+                    t:Play()
+                    t.Completed:Wait()
+                end
+                MainFrame.Position = UDim2.new(0.5, origOffset, 0.5, 0)
+            end)
+            task.wait(0.6)
+            InputStroke.Color = Color3.fromRGB(60, 18, 28)
         end
     end)
 
-    -- ĐỔI NGÔN NGỮ NHANH TRỰC TIẾP KHI BẤM NÚT (KHÔNG CẦN MỞ POPUP RườM RÀ)
+    -- ĐỔI NGÔN NGỮ TRỰC TIẾP
     OpenLangBtn.MouseButton1Click:Connect(function()
-        PlayClickEffect(OpenLangBtn)
+        PlaySpringButton(OpenLangBtn)
         CurrentLang = (CurrentLang == "VI") and "EN" or "VI"
         local data = Languages[CurrentLang]
         OpenLangBtn.Text = data.LangBtnText
         TitleLabel.Text = data.Title
         SubTitleLabel.Text = data.Subtitle
-        GameBadge.Text = data.BadgeGame
+        CenterTitle.Text = data.CenterTitle
+        CenterSub.Text = data.CenterSub
         InputBox.PlaceholderText = data.Placeholder
         QuickPasteBtn.Text = data.QuickPaste
         GetKeyBtn.Text = data.GetKey
@@ -1115,18 +1139,18 @@ OpenKeySystemUI = function()
     end)
 
     MainFrame.BackgroundTransparency = 1
-    MainScale.Scale = 0.85
-    TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { BackgroundTransparency = 0 }):Play()
-    TweenService:Create(MainScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 }):Play()
+    MainScale.Scale = 0.4
+    TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { BackgroundTransparency = 0 }):Play()
+    TweenService:Create(MainScale, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 }):Play()
 end
 
 -- =========================================================================
---   LUỒNG CHÍNH: DÙNG THỬ 2 PHÚT & BẢO MẬT KHÓA MÀN HÌNH TỰ ĐỘNG
+--   LUỒNG CHÍNH: DÙNG THỬ 2 PHÚT & KHÓA MÀN HÌNH TỰ ĐỘNG
 -- =========================================================================
 
 local keyTimeLeft = GetKeyRemainingTime()
 if keyTimeLeft and keyTimeLeft > 0 then
-    ShowLiveToast("CHILLI HUB V2 (24H)", keyTimeLeft, Color3.fromRGB(225, 29, 72))
+    ShowLiveToast("CHILLI HUB V5 (24H)", keyTimeLeft, Color3.fromRGB(225, 29, 72))
     LaunchTargetScriptWithWatcher()
     return
 end
@@ -1140,7 +1164,7 @@ end
 
 if trialData.Tampered then
     ApplyScreenLockdown()
-    ShowLiveToast("PHÁT HIỆN CHỈNH GIỜ THIẾT BỊ", 0, Color3.fromRGB(239, 68, 68))
+    ShowLiveToast("⚠ SECURITY: TAMPER DETECTED", 0, Color3.fromRGB(239, 68, 68))
     OpenKeySystemUI()
     return
 end
@@ -1150,11 +1174,11 @@ local remaining = targetEndTime - os.time()
 
 if remaining <= 0 then
     ApplyScreenLockdown()
-    ShowLiveToast("HẾT THỜI GIAN DÙNG THỬ (2 PHÚT)", 0, Color3.fromRGB(225, 29, 72))
+    ShowLiveToast("⚠️ HẾT THỜI GIAN DÙNG THỬ (2 PHÚT)", 0, Color3.fromRGB(239, 68, 68))
     OpenKeySystemUI()
     return
 else
-    ShowLiveToast("CHILLI HUB V2 (DÙNG THỬ 2 PHÚT)", remaining, Color3.fromRGB(225, 29, 72))
+    ShowLiveToast("CHILLI HUB V5 (DÙNG THỬ 2 PHÚT)", remaining, Color3.fromRGB(225, 29, 72))
     LaunchTargetScriptWithWatcher()
 
     task.spawn(function()
@@ -1180,8 +1204,8 @@ else
                 SaveTrialData(trialData.StartTime, os.time())
                 TerminateTargetScript()
                 ApplyScreenLockdown()
-                ShowLiveToast("HẾT THỜI GIAN DÙNG THỬ (2 PHÚT)", 0, Color3.fromRGB(225, 29, 72))
-                task.wait(0.25)
+                ShowLiveToast("⚠️ HẾT THỜI GIAN DÙNG THỬ (2 PHÚT)", 0, Color3.fromRGB(225, 29, 72))
+                task.wait(0.3)
                 OpenKeySystemUI()
                 break
             end
