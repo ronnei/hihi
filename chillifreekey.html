@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chilli Hub V5 — Nhận Key</title>
+    <title>Chilli Hub V5 — Key System</title>
 
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <!-- Bảo mật: Xóa ngay ?pass= khỏi thanh địa chỉ chống Chrome tự gợi ý -->
+    <!-- Xóa ngay ?pass= khỏi thanh địa chỉ để chống Chrome lưu lịch sử gợi ý -->
     <script>
         (function() {
             try {
@@ -17,7 +17,7 @@
                 const pass = url.searchParams.get("pass");
                 const VALID_PASS = ["chilli", "chilliv5", "chillihubv5", "ronnei", "ronnei2026"];
 
-                if (pass && VALID_PASS.includes(pass.toLowerCase())) {
+                if (pass && VALID_PASS.includes(pass)) {
                     sessionStorage.setItem("ChilliV5_Session", "VERIFIED_" + Date.now());
                     window.history.replaceState(null, document.title, window.location.pathname);
                 }
@@ -28,12 +28,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --bg-main: #090a0f;
             --bg-card: #11131a;
-            --bg-element: #171a24;
+            --bg-input: #0b0c10;
             --border-subtle: #222634;
             --border-focus: #e11d48;
             --accent-primary: #e11d48;
@@ -56,84 +55,85 @@
         body {
             background-color: var(--bg-main);
             background-image: radial-gradient(circle at 50% 0%, rgba(225, 29, 72, 0.12) 0%, transparent 60%);
-            color: var(--text-main);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 20px 14px;
+            color: var(--text-main);
         }
 
         /* Màn hình chặn khi chưa vượt link */
-        .restricted-card {
+        .restricted-box {
             width: 100%;
-            max-width: 400px;
+            max-width: 390px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: 18px;
-            padding: 32px 24px;
+            padding: 36px 24px;
             text-align: center;
             display: none;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
         }
 
         .restricted-icon {
             width: 48px;
             height: 48px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.25);
-            color: #ef4444;
+            background: rgba(225, 29, 72, 0.1);
+            border: 1px solid rgba(225, 29, 72, 0.3);
             border-radius: 12px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            margin: 0 auto 16px;
+            font-size: 22px;
+            margin-bottom: 16px;
         }
 
         .restricted-title {
             font-size: 18px;
             font-weight: 700;
-            margin-bottom: 8px;
             color: var(--text-main);
+            margin-bottom: 8px;
         }
 
         .restricted-desc {
-            font-size: 13.5px;
+            font-size: 13px;
             color: var(--text-muted);
             line-height: 1.6;
             margin-bottom: 20px;
         }
 
         .restricted-note {
-            background: var(--bg-element);
-            border-radius: 10px;
-            padding: 12px;
             font-size: 12.5px;
-            color: #fda4af;
-            font-weight: 500;
+            font-weight: 600;
+            color: #fb7185;
+            background: rgba(225, 29, 72, 0.08);
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(225, 29, 72, 0.2);
         }
 
-        /* Khung chính Chilli Hub V5 */
+        /* Thẻ chính Chilli Hub V5 */
         .main-card {
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: 20px;
             padding: 24px 20px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
             display: none;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
-            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideUp 0.3s ease-out;
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(14px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Header gọn gàng */
-        .header {
+        /* Phần đầu thẻ (Header) */
+        .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -151,8 +151,8 @@
         .brand-logo {
             width: 42px;
             height: 42px;
-            background: var(--bg-element);
-            border: 1px solid rgba(225, 29, 72, 0.35);
+            background: #191c26;
+            border: 1px solid #2e3446;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -161,62 +161,65 @@
         }
 
         .brand-title {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
-            letter-spacing: -0.3px;
             color: var(--text-main);
+            letter-spacing: -0.2px;
         }
 
         .brand-sub {
-            font-size: 12px;
+            font-size: 11.5px;
             color: var(--text-muted);
             font-weight: 500;
             margin-top: 2px;
         }
 
-        .badge-version {
-            background: rgba(225, 29, 72, 0.12);
-            color: #fb7185;
-            border: 1px solid rgba(225, 29, 72, 0.25);
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #34d399;
+            padding: 5px 10px;
+            border-radius: 99px;
             font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
+            font-weight: 600;
         }
 
-        /* Thông tin thời hạn Key */
-        .stats-bar {
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+        }
+
+        /* Thông số thời gian */
+        .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 18px;
         }
 
-        .stat-item {
-            background: var(--bg-element);
+        .stat-box {
+            background: var(--bg-input);
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
             padding: 10px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
         }
 
         .stat-label {
             font-size: 11px;
             color: var(--text-dim);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
+            font-weight: 500;
+            margin-bottom: 4px;
         }
 
         .stat-value {
             font-size: 13px;
             font-weight: 700;
             color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .stat-value.mono {
@@ -224,75 +227,63 @@
             color: #fb7185;
         }
 
-        .dot-online {
-            width: 7px;
-            height: 7px;
-            background: var(--success);
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        /* Khu vực lấy Key */
-        .section-box {
-            background: var(--bg-element);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 14px;
-        }
-
-        .section-top {
+        /* Khung nhận Key */
+        .field-label {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .section-label {
             font-size: 12px;
             font-weight: 600;
             color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
-        .key-status {
+        .state-tag {
             font-size: 11px;
             font-weight: 600;
             color: var(--text-dim);
         }
 
-        .key-status.ready {
+        .state-tag.ready {
             color: var(--success);
         }
 
-        .key-field {
-            background: var(--bg-main);
+        .key-box {
+            background: var(--bg-input);
             border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            padding: 13px 12px;
+            border-radius: 12px;
+            padding: 14px;
             text-align: center;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .key-box.active {
+            border-color: rgba(225, 29, 72, 0.5);
+            background: rgba(225, 29, 72, 0.04);
+        }
+
+        .key-value {
             font-family: 'JetBrains Mono', monospace;
             font-size: 13.5px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-dim);
-            letter-spacing: 0.8px;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
             word-break: break-all;
         }
 
-        .key-field.active {
-            border-color: rgba(225, 29, 72, 0.5);
+        .key-value.active {
             color: var(--text-main);
-            background: #0d0f17;
+            user-select: all;
         }
 
-        .btn-primary {
+        .primary-btn {
             width: 100%;
             height: 44px;
             background: var(--accent-primary);
             color: #ffffff;
             border: none;
-            border-radius: 10px;
+            border-radius: 11px;
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
@@ -300,111 +291,120 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: background 0.15s ease, transform 0.1s ease;
+            transition: background 0.15s, transform 0.1s;
+            margin-bottom: 20px;
         }
 
-        .btn-primary:hover {
-            background: var(--accent-hover);
-        }
+        .primary-btn:hover { background: var(--accent-hover); }
+        .primary-btn:active { transform: scale(0.985); }
+        .primary-btn.copied { background: var(--success); }
 
-        .btn-primary:active {
-            transform: scale(0.985);
-        }
-
-        .btn-primary.success {
-            background: var(--success);
-        }
-
-        /* Khu vực Script Loader */
-        .script-box {
-            background: var(--bg-element);
+        /* Khung Script Loader */
+        .script-container {
+            background: var(--bg-input);
             border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 14px 16px;
+            border-radius: 12px;
+            padding: 12px;
             margin-bottom: 16px;
         }
 
-        .btn-text-copy {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-main);
-            font-size: 11px;
+        .script-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .script-label {
+            font-size: 11.5px;
             font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .copy-small-btn {
+            background: #191c26;
+            border: 1px solid #2e3446;
+            color: var(--text-main);
             padding: 4px 10px;
             border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.15s;
         }
 
-        .btn-text-copy:hover {
-            background: rgba(255, 255, 255, 0.12);
-        }
+        .copy-small-btn:active { transform: scale(0.96); }
 
-        .code-preview {
-            background: var(--bg-main);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 10px 12px;
+        .code-block {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
+            font-size: 10px;
             color: #cbd5e1;
             line-height: 1.5;
             word-break: break-all;
             user-select: all;
-        }
-
-        .footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11.5px;
-            color: var(--text-dim);
             padding-top: 4px;
         }
 
-        .toast-notification {
+        /* Chân trang */
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .audio-toggle {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Thông báo nổi (Toast) */
+        .toast-popup {
             position: fixed;
-            bottom: 20px;
+            bottom: -60px;
             left: 50%;
-            transform: translateX(-50%) translateY(80px);
-            background: #181b26;
-            border: 1px solid var(--border-subtle);
+            transform: translateX(-50%);
+            background: #181b24;
+            border: 1px solid #2e3446;
             color: var(--text-main);
             padding: 10px 18px;
             border-radius: 10px;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 600;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            opacity: 0;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: bottom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
-            z-index: 100;
             white-space: nowrap;
+            z-index: 100;
         }
 
-        .toast-notification.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
+        .toast-popup.show { bottom: 24px; }
     </style>
 </head>
 <body>
 
-    <!-- Màn hình cảnh báo khi mở trực tiếp không qua link -->
-    <div class="restricted-card" id="deniedView">
+    <!-- MÀN HÌNH CHẶN KHI TRUY CẬP TRỰC TIẾP KHÔNG QUA LINK RÚT GỌN -->
+    <div class="restricted-box" id="deniedScreen">
         <div class="restricted-icon">🔒</div>
-        <div class="restricted-title">Phiên truy cập đã hết hạn</div>
+        <div class="restricted-title">Chưa xác thực truy cập</div>
         <p class="restricted-desc">
-            Bạn đang truy cập trực tiếp từ lịch sử trình duyệt hoặc liên kết chưa được xác nhận.
+            Phiên làm việc đã hết hạn hoặc bạn đang mở trực tiếp từ lịch sử trình duyệt.
         </p>
         <div class="restricted-note">
-            Vui lòng mở menu Chilli Hub V5 trong game và bấm "Lấy Key" để tiếp tục.
+            Vui lòng vào lại menu Chilli Hub V5 trong game và bấm "Lấy Key" để tiếp tục.
         </div>
     </div>
 
-    <!-- Giao diện chính Chilli Hub V5 -->
-    <div class="main-card" id="appView">
-        <div class="header">
+    <!-- GIAO DIỆN CHÍNH CHILLI HUB V5 -->
+    <div class="main-card" id="mainScreen">
+        <div class="card-header">
             <div class="brand-group">
                 <div class="brand-logo">🌶️</div>
                 <div>
@@ -412,173 +412,210 @@
                     <div class="brand-sub">by ronnei7.htk</div>
                 </div>
             </div>
-            <div class="badge-version">V5 RELEASE</div>
-        </div>
-
-        <div class="stats-bar">
-            <div class="stat-item">
-                <span class="stat-label">Trạng thái</span>
-                <span class="stat-value">
-                    <span class="dot-online"></span> Hoạt động (24h)
-                </span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Làm mới sau</span>
-                <span class="stat-value mono" id="resetTimer">--:--:--</span>
+            <div class="status-pill">
+                <span class="status-dot"></span>
+                Hoạt động
             </div>
         </div>
 
-        <div class="section-box">
-            <div class="section-top">
-                <span class="section-label">Mã Key cá nhân</span>
-                <span class="key-status" id="keyStatusText">Chưa khởi tạo</span>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Thời hạn Key</div>
+                <div class="stat-value">24 Giờ</div>
             </div>
-
-            <div class="key-field" id="keyOutput">••••••-••••-••••-••••</div>
-
-            <button class="btn-primary" id="mainActionBtn" onclick="handleKeyButton()">
-                <span id="btnLabel">Tạo Mã Key Ngay</span>
-            </button>
+            <div class="stat-box">
+                <div class="stat-label">Làm mới sau</div>
+                <div class="stat-value mono" id="countdownTimer">--:--:--</div>
+            </div>
         </div>
 
-        <div class="script-box">
-            <div class="section-top">
-                <span class="section-label">Script Loader (V5)</span>
-                <button class="btn-text-copy" onclick="copyLoaderScript()">Sao chép</button>
-            </div>
-            <div class="code-preview">loadstring(game:HttpGet("https://raw.githubusercontent.com/ronnei/hihi/refs/heads/main/chillihubv5.lua"))()</div>
+        <div class="field-label">
+            <span>Mã Key của bạn</span>
+            <span class="state-tag" id="keyStateTag">Chưa tạo</span>
         </div>
 
-        <div class="footer">
+        <div class="key-box" id="keyBox">
+            <div class="key-value" id="keyDisplay">••••••-••••-••••-••••</div>
+        </div>
+
+        <button class="primary-btn" id="actionBtn" onclick="handleKeyButton()">
+            <span id="btnText">Nhận Key Chilli V5</span>
+        </button>
+
+        <div class="script-container">
+            <div class="script-top">
+                <span class="script-label">Script Loader (V5)</span>
+                <button class="copy-small-btn" onclick="copyLoaderScript()">Sao chép</button>
+            </div>
+            <div class="code-block">loadstring(game:HttpGet("https://raw.githubusercontent.com/ronnei/hihi/refs/heads/main/chillihubv5.lua"))()</div>
+        </div>
+
+        <div class="card-footer">
             <span>Tự động đổi mã lúc 00:00 (GMT+7)</span>
-            <span>Chilli Hub V5</span>
+            <button class="audio-toggle" id="sfxToggle" onclick="toggleAudio()">Âm thanh: Bật</button>
         </div>
     </div>
 
-    <div class="toast-notification" id="toastBox">Đã sao chép vào bộ nhớ tạm</div>
+    <div class="toast-popup" id="toastPopup">Đã sao chép vào bộ nhớ tạm</div>
         <script>
-        // 1. Kiểm tra quyền truy cập Session
-        const hasSession = sessionStorage.getItem("ChilliV5_Session");
-        if (hasSession) {
-            document.getElementById("appView").style.display = "block";
+        // =========================================================================
+        //  1. KIỂM TRA PHIÊN HỢP LỆ (CHỐNG LƯU URL GỢI Ý TRÊN CHROME)
+        // =========================================================================
+        const hasValidSession = sessionStorage.getItem("ChilliV5_Session");
+
+        if (hasValidSession) {
+            document.getElementById('mainScreen').style.display = 'block';
+            document.getElementById('deniedScreen').style.display = 'none';
         } else {
-            document.getElementById("deniedView").style.display = "block";
+            document.getElementById('deniedScreen').style.display = 'block';
+            document.getElementById('mainScreen').style.display = 'none';
         }
 
-        // 2. Lấy thời gian chuẩn GMT+7 Việt Nam
-        function getVNDate() {
+        // =========================================================================
+        //  2. ÂM THANH PHẢN HỒI TỐI GIẢN
+        // =========================================================================
+        let soundEnabled = true;
+        let keyUnlocked = false;
+        let currentKey = "";
+
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playTone(freq, duration) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sfxToggle');
+            btn.innerText = soundEnabled ? "Âm thanh: Bật" : "Âm thanh: Tắt";
+            if (soundEnabled) playTone(800, 0.08);
+        }
+
+        // =========================================================================
+        //  3. THUẬT TOÁN KEY 24H: chillihubv5-XXXX-YYYY-ZZZZ (GMT+7)
+        // =========================================================================
+        function getVNTime() {
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
             return new Date(utc + (7 * 3600000));
         }
 
-        // 3. Thuật toán tạo Key 24h cho Chilli Hub V5
         function generateChilliV5Key() {
-            const vn = getVNDate();
-            const d = vn.getDate();
-            const m = vn.getMonth() + 1;
-            const y = vn.getFullYear();
+            const vn = getVNTime();
+            const day = vn.getDate();
+            const month = vn.getMonth() + 1;
+            const year = vn.getFullYear();
 
-            const p1 = (d * 4813 + m * 3191 + y * 173) % 65535;
-            const p2 = (d * 7129 + m * 5417 + y * 293) % 65535;
-            const p3 = (d * 8923 + m * 6829 + y * 431) % 65535;
+            // Công thức băm riêng cho phiên bản Chilli Hub V5
+            const v1 = (day * 4339 + month * 3187 + year * 173) % 65535;
+            const v2 = (day * 6823 + month * 4931 + year * 293) % 65535;
+            const v3 = (day * 8513 + month * 7109 + year * 431) % 65535;
 
-            const h1 = p1.toString(16).toUpperCase().padStart(4, '0');
-            const h2 = p2.toString(16).toUpperCase().padStart(4, '0');
-            const h3 = p3.toString(16).toUpperCase().padStart(4, '0');
+            const h1 = v1.toString(16).toUpperCase().padStart(4, '0');
+            const h2 = v2.toString(16).toUpperCase().padStart(4, '0');
+            const h3 = v3.toString(16).toUpperCase().padStart(4, '0');
 
             return `chillihubv5-${h1}-${h2}-${h3}`;
         }
 
-        // 4. Bộ đếm ngược đến 00:00 GMT+7
         function updateTimer() {
-            const vn = getVNDate();
-            const passed = (vn.getHours() * 3600) + (vn.getMinutes() * 60) + vn.getSeconds();
-            const left = 86400 - passed;
+            const vn = getVNTime();
+            const elapsed = (vn.getHours() * 3600) + (vn.getMinutes() * 60) + vn.getSeconds();
+            const left = 86400 - elapsed;
 
-            const hh = String(Math.floor(left / 3600)).padStart(2, '0');
-            const mm = String(Math.floor((left % 3600) / 60)).padStart(2, '0');
-            const ss = String(left % 60).padStart(2, '0');
+            const h = Math.floor(left / 3600).toString().padStart(2, '0');
+            const m = Math.floor((left % 3600) / 60).toString().padStart(2, '0');
+            const s = (left % 60).toString().padStart(2, '0');
 
-            const el = document.getElementById("resetTimer");
-            if (el) el.textContent = `${hh}:${mm}:${ss}`;
+            const el = document.getElementById('countdownTimer');
+            if (el) el.innerText = `${h}:${m}:${s}`;
         }
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // 5. Tiện ích thông báo & Sao chép
-        let toastTimer = null;
-        function showNotification(message) {
-            const toast = document.getElementById("toastBox");
-            toast.textContent = message;
-            toast.classList.add("show");
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+        function notifyToast(text) {
+            const toast = document.getElementById('toastPopup');
+            toast.innerText = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        function copyTextToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-            } else {
-                fallbackCopy(text);
-            }
+        function copyTextToClipboard(str) {
+            navigator.clipboard.writeText(str).catch(() => {
+                const ta = document.createElement("textarea");
+                ta.value = str;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+            });
         }
-
-        function fallbackCopy(text) {
-            const area = document.createElement("textarea");
-            area.value = text;
-            document.body.appendChild(area);
-            area.select();
-            document.execCommand("copy");
-            document.body.removeChild(area);
-        }
-
-        // 6. Xử lý nút Nhận Key & Sao chép Key
-        let currentKey = "";
-        let isUnlocked = false;
 
         function handleKeyButton() {
-            const btn = document.getElementById("mainActionBtn");
-            const btnLabel = document.getElementById("btnLabel");
-            const keyField = document.getElementById("keyOutput");
-            const statusText = document.getElementById("keyStatusText");
+            const btn = document.getElementById('actionBtn');
+            const btnText = document.getElementById('btnText');
+            const keyDisplay = document.getElementById('keyDisplay');
+            const keyBox = document.getElementById('keyBox');
+            const stateTag = document.getElementById('keyStateTag');
 
-            if (!isUnlocked) {
-                btn.style.pointerEvents = "none";
-                btnLabel.textContent = "Đang khởi tạo...";
+            if (!keyUnlocked) {
+                btn.style.pointerEvents = 'none';
+                btnText.innerText = "Đang khởi tạo mã...";
 
                 setTimeout(() => {
                     currentKey = generateChilliV5Key();
-                    isUnlocked = true;
+                    keyUnlocked = true;
 
-                    keyField.textContent = currentKey;
-                    keyField.classList.add("active");
+                    keyDisplay.innerText = currentKey;
+                    keyDisplay.classList.add('active');
+                    keyBox.classList.add('active');
 
-                    statusText.textContent = "Sẵn sàng sử dụng";
-                    statusText.classList.add("ready");
+                    stateTag.innerText = "Sẵn sàng";
+                    stateTag.classList.add('ready');
 
-                    btnLabel.textContent = "Sao Chép Mã Key";
-                    btn.style.pointerEvents = "auto";
+                    btnText.innerText = "Sao chép mã Key";
+                    btn.style.pointerEvents = 'auto';
 
-                    showNotification("Đã tạo mã Key Chilli Hub V5!");
-                }, 300);
+                    playTone(960, 0.12);
+                    notifyToast("Đã tạo mã Key Chilli Hub V5!");
+                }, 280);
             } else {
+                playTone(1100, 0.09);
                 copyTextToClipboard(currentKey);
-                btn.classList.add("success");
-                btnLabel.textContent = "✔ Đã Sao Chép Key";
-                showNotification("Đã sao chép Key vào bộ nhớ tạm!");
+
+                btn.classList.add('copied');
+                btnText.innerText = "Đã sao chép mã Key!";
+                notifyToast("Đã sao chép Key vào bộ nhớ tạm!");
 
                 setTimeout(() => {
-                    btn.classList.remove("success");
-                    btnLabel.textContent = "Sao Chép Mã Key";
+                    btn.classList.remove('copied');
+                    btnText.innerText = "Sao chép mã Key";
                 }, 2000);
             }
         }
 
         function copyLoaderScript() {
+            playTone(1000, 0.08);
             const code = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ronnei/hihi/refs/heads/main/chillihubv5.lua"))()';
             copyTextToClipboard(code);
-            showNotification("Đã sao chép Script Loader V5!");
+            notifyToast("Đã sao chép Script Loader V5!");
         }
     </script>
 </body>
