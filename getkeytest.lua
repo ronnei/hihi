@@ -1,6 +1,6 @@
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 1/5)
---   PRELOAD ASSET HỘP QUÀ · TỈ LỆ 80% GETKEY / 20% NOKEY · CHU KỲ 00:00 GMT+7
+--   PRELOAD HỘP QUÀ 115116611981430 · TỈ LỆ 80% GETKEY / 20% NOKEY · 00:00 GMT+7
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -14,12 +14,12 @@ local LocalPlayer = Players.LocalPlayer
 local KeyUrl = "https://link4m.net/m2JAFv"
 local TutorialUrl = "https://craftvip.github.io/free/getkey.html"
 local TargetScriptUrl = "https://raw.githubusercontent.com/robvxs24/freemium/refs/heads/main/chilliv5beta.lua"
-local GiftBoxAssetId = "rbxassetid://138733048851803"
+local GiftBoxAssetId = "rbxassetid://115116611981430"
 
 local KeyFileName = "ChilliV5_KeyData.json"
 local TrialFileName = "ChilliV5_TrialData.json"
 local GachaFileName = "ChilliV5_GachaData.json"
-local TRIAL_DURATION = 120 -- Thời gian dùng thử 2 phút (120 giây)
+local TRIAL_DURATION = 120 -- Thời hạn dùng thử chính xác 2 phút (120 giây)
 
 local InitialGuis = {}
 local ScriptConnections = {}
@@ -27,7 +27,7 @@ local ActiveBlurEffect = nil
 local InputBlockerScreen = nil
 local OpenKeySystemUI = nil
 
--- TẢI TRƯỚC HÌNH ẢNH HỘP QUÀ VÀO BỘ NHỚ RAM ĐỂ HIỂN THỊ TỨC THÌ
+-- TẢI TRƯỚC HÌNH ẢNH HỘP QUÀ VÀO RAM ĐỂ HIỂN THỊ TỨC THÌ KHÔNG BỊ TRỄ
 task.spawn(function()
     pcall(function()
         ContentProvider:PreloadAsync({ GiftBoxAssetId })
@@ -165,7 +165,7 @@ local function VerifyChilliV5Key(rawInput: string): boolean
 end
 -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 2/5)
---   SNAPSHOT QUẢN LÝ UI · KHÓA MÀN HÌNH BẢO MẬT · LIVE TOAST THỜI GIAN THỰC
+--   SNAPSHOT UI · KHÓA MÀN HÌNH BẢO MẬT · LIVE TOAST THỜI GIAN THỰC
 -- =========================================================================
 
 local function TakeGuiSnapshot()
@@ -629,7 +629,7 @@ OpenKeySystemUI = function()
     QuickPasteStroke.Color = Color3.fromRGB(150, 40, 60)
     -- =========================================================================
 --   🌶️ CHILLI HUB V5 X RONNEI - STEAL AN EGG 🥚 (PHẦN 4/5)
---   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (80% GETKEY - 20% NOKEY, HIỂN THỊ 50/50)
+--   CỤM NÚT VIP · MODAL HỘP QUÀ GACHA (80% GETKEY - 20% NOKEY)
 -- =========================================================================
 
     local ButtonsRow = Instance.new("Frame")
@@ -823,6 +823,7 @@ OpenKeySystemUI = function()
         TagStroke.Color = Color3.fromRGB(210, 50, 80)
         TagStroke.Thickness = 1
 
+        -- Mặt nạ cắt CropMask cất gọn viền trắng của ảnh 115116611981430
         local CropMask = Instance.new("Frame")
         CropMask.Name = "CropMask"
         CropMask.AnchorPoint = Vector2.new(0.5, 0)
@@ -838,7 +839,7 @@ OpenKeySystemUI = function()
         local GiftImage = Instance.new("ImageLabel")
         GiftImage.Name = "GiftImage"
         GiftImage.AnchorPoint = Vector2.new(0.5, 0.5)
-        GiftImage.Size = UDim2.new(1.28, 0, 1.28, 0)
+        GiftImage.Size = UDim2.new(1.3, 0, 1.3, 0)
         GiftImage.Position = UDim2.new(0.5, 0, 0.52, 0)
         GiftImage.BackgroundTransparency = 1
         GiftImage.Image = GiftBoxAssetId
@@ -926,7 +927,7 @@ OpenKeySystemUI = function()
         OpenGachaModal()
     end)
 
-    -- HÀM MỞ HỘP QUÀ: TỈ LỆ THỰC TẾ 80% GETKEY (> 20) VÀ 20% NOKEY (<= 20)
+    -- HÀM MỞ HỘP: TỈ LỆ THỰC TẾ 80% GETKEY (> 20) VÀ 20% NOKEY (<= 20)
     local function ExecuteBoxRoll(chosenBox: TextButton, otherBox: TextButton, chosenStroke: UIStroke, chosenMask: Frame, chosenTitle: TextLabel, chosenHint: TextLabel)
         if isRollingMutex then return end
         isRollingMutex = true
@@ -1174,7 +1175,7 @@ local remaining = targetEndTime - os.time()
 
 if remaining <= 0 then
     ApplyScreenLockdown()
-    ShowLiveToast("⚠️ HẾT THỜI GIAN DÙNG THỬ (2 PHÚT)", 0, Color3.fromRGB(239, 68, 68))
+    ShowLiveToast("⚠️ HẾT THỜI GIAN DÙNG THỬ (2 PHÚT)", 0, Color3.fromRGB(225, 29, 72))
     OpenKeySystemUI()
     return
 else
